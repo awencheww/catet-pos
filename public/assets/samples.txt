@@ -1,0 +1,23 @@
+DB Design: https://erd.dbdesigner.net/designer/schema/1693748435-catet-pos_db
+
+Mango Float - 110
+Oreo Float - 110
+Leche Flan - 90
+Mango de Leche - 150
+Halohalo - 75
+Mais Con Yelo - 60
+Iced Coffee - 40
+Sundae - 45
+Milktea - 85
+Pizza - 160
+Puto Cake - 100
+Chicken Bread - 35
+Ham n Cheese Loaf - 130
+Puto Flan - 100
+Clubhouse w Nachos - 130
+Avocado Shake - 70
+Fruit Overload - 100
+Lomi - 150
+Chocomoist Cake - 120
+Clubhouse w Fries - 130
+Baked Spag - 110
