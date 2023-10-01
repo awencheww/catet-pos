@@ -1,0 +1,1 @@
+<script src="{{ asset('assets/custom/js/color-modes.js') }}"></script>
