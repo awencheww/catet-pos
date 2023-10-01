@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-      <script src="{{ asset('assets/custom/js/color-modes.js') }}"></script>
-
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Shop Homepage</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{{ asset('assets/icon/fav-icon.ico') }}" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{ asset('assets/bootstrap-5.3.2/css/bootstrap.min.css') }}" rel="stylesheet">
+
+        <x-fav-icon></x-fav-icon>
+        <x-css-link></x-css-link>
     </head>
     <body>
         <!-- Navigation-->
@@ -35,17 +30,24 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                    <form class="d-flex me-auto">
+                        <button class="btn text-dark" type="submit">
+                          Shopping Cart
+                          <i class="bi-cart-fill me-1" style="font-size: 1.3em;">
+                            <span class="badge bg-info text-white ms-1 rounded-pill" style="top:-1.3em; left:-1.45em; font-size:.5em">500</span>
+                          </i>
+                          
                         </button>
                     </form>
-                    <a href="/auth/login">
+                    <a href="{{route('login')}}">
                       <button class="btn btn-primary m-1" type="button">
-                        Login
-                        <i class="bi bi-arrow-right-square"></i>
+                        <i class="bi bi-arrow-right-square"> Login </i>
+                      </button>
+                    </a>
+                    {{' or '}}
+                    <a href="{{route('register')}}">
+                      <button class="btn btn-success m-1" type="button">
+                        <i class="bi bi-person-plus"> Register </i>
                       </button>
                     </a>
                 </div>
@@ -267,7 +269,7 @@
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
         </footer>
-        <!-- Bootstrap core JS-->
-        <script src="{{ asset('assets/bootstrap-5.3.2/js/bootstrap.bundle.min.js') }}"></script>
+        
+        <x-body-js-link></x-body-js-link>
     </body>
 </html>
