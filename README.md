@@ -1,4 +1,15 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## How to Setup Laravel Project Step by Step
+1. First download [catet-pos.zip](https://github.com/awencheww/catet-pos/archive/refs/heads/main.zip) project from github
+2. extract file to `XAMPP/htdocs/` folder
+3. Open your `terminal` or `Command Prompt` and type:
+    - cd `path:/XAMPP/htdocs/catet-pos`
+4. From your project `catet-pos` run the following command 
+    - cp .env.example .env
+    - composer install
+    - php artisan key:generate
+    - php artisan serve
+
+<!-- <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
@@ -63,4 +74,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). -->
