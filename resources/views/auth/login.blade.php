@@ -8,8 +8,29 @@
     </x-toggle-theme>
 @endsection
 @section('content')
+  @if (Session::has('error'))
+  <script type="text/javascript">
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: "{{session()->get('error')}}",
+      // footer: '<a href="">Why do I have this issue?</a>'
+    })
+  </script>
+  @endif
+
 <main class="form-signin w-100 m-auto text-center">
-    <form>
+  @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <ul>
+          @foreach ($errors->all() as $error)
+              <li class="text-left">{{$error}}</li>
+          @endforeach
+        </ul>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+    <form method="POST" action="{{route('auth.login')}}">
       @csrf
       {{-- component form-logo --}}
       <x-form-logo></x-form-logo>
@@ -17,12 +38,25 @@
       <h1 class="h2 mb-3 fw-normal">Please Login</h1>
 
       <div class="form-floating">
-        <input type="text" class="form-control" id="username" placeholder="name@example.com">
-        <label for="username">Email / Username</label>
+        {{-- @error('email')
+          <div class="invalid-tooltip">
+            {{$message}}
+          </div>
+        @enderror
+        @error('username')
+          <div class="invalid-tooltip">
+            {{$message}}
+          </div>
+        @enderror --}}
+        <input type="text" class="form-control @error('username') is-invalid @enderror ?: @error('email') is-invalid @enderror" id="login_email_username" name="login_email_username" value="{{old('username') ?: old('email')}}" placeholder="name@example.com">
+        <label for="login_email_username">Email / Username</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{old('password')}}" placeholder="Password">
         <label for="password">Password</label>
+        {{-- @error('password')
+          <span class="invalid-feedback">{{$message}}</span>
+        @enderror --}}
       </div>
 
       {{-- <div class="form-check text-start my-3">

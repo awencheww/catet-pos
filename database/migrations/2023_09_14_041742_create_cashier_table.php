@@ -10,12 +10,17 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('cashier', function (Blueprint $table) {
+        Schema::create('cashiers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->timestamps();
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->datetime('created_at')->nullable();
+            $table->timestamp('updated_at', $precision = 0);
         });
     }
 

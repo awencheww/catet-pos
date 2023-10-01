@@ -24,4 +24,6 @@ Route::get('/dashboard', function () {
 
 // Authentication routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'customerRegister'])->name('customer.register');

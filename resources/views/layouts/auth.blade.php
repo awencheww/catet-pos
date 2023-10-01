@@ -14,6 +14,7 @@
     <x-fav-icon></x-fav-icon>
     <x-css-link></x-css-link>
     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Custom styles for this template -->
     <link href="{{ asset('assets/custom/css/login-register.css') }}" rel="stylesheet">
   </head>
