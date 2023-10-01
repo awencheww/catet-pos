@@ -45,9 +45,8 @@
         @error('password') <span class="invalid-feedback">{{$message}}</span> @enderror
       </div>
       <div class="form-floating mb-4">
-        <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" id="password-confirm" value="{{old('password')}}" placeholder="Password">
+        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password_confirmation" id="password-confirm" autocomplete="new-password" placeholder="Password">
         <label for="password-confirm">Confirm Password</label>
-        @error('password_confirmation') <span class="invalid-feedback">{{$message}}</span> @enderror
       </div>
 
       <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Register</button>

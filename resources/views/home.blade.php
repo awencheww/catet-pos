@@ -9,6 +9,7 @@
 
         <x-fav-icon></x-fav-icon>
         <x-css-link></x-css-link>
+        <script src="{{asset('assets/sweetalert2/sweetalert2.min.js')}}"></script>
     </head>
     <body>
         <!-- Navigation-->
@@ -56,6 +57,27 @@
         <!-- Header-->
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
+              {{-- sweetalert toast --}}
+              @if ($message = Session::get('success'))
+                <script type="text/javascript">
+                  const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+
+                  Toast.fire({
+                    icon: 'success',
+                    title: '{{ $message }}'
+                  })
+                </script>
+              @endif
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Shop in style</h1>
                     <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>

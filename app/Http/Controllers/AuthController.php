@@ -11,12 +11,15 @@ use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
-    protected $inputType;
+    protected $inputType; //this is for filtering login input if email or username
+
+    // login view
     protected function login(): View
     {
         return view('auth.login');
     }
 
+    // login account serve as backend of login view
     public function authenticate(Request $request):RedirectResponse 
     {
         $this->inputType = filter_var($request->input('login_email_username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -29,16 +32,19 @@ class AuthController extends Controller
         $userAuth = Auth::attempt($credentials);
         if($userAuth) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard')->with('success', 'Welcome '.$request->username.'!');
+            // redirect to homepage
+            return redirect()->intended()->with('success', 'Welcome our valued Customer '.$request->username ?: $request->email.'!');
         }
         return redirect()->back()->with('error', 'Account Password is Incorrect.');
     }
 
-    protected function register(): View
+    // register view
+    public function register(): View
     {
         return view('auth.register');
     }
 
+    // register account serve as backend for register view or customer registration form
     public function customerRegister(Request $request): RedirectResponse
     {
         $request->validate([
@@ -60,7 +66,8 @@ class AuthController extends Controller
         return redirect()->back()->with('success', 'You are Successfully registered! Enjoy your Shopping.');
     }
 
-    protected function dashboard(): View
+    // dashboard view
+    public function dashboard(): View
     {
         return view('dashboard.index');
     }

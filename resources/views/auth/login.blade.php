@@ -38,25 +38,15 @@
       <h1 class="h2 mb-3 fw-normal">Please Login</h1>
 
       <div class="form-floating">
-        {{-- @error('email')
-          <div class="invalid-tooltip">
-            {{$message}}
-          </div>
-        @enderror
-        @error('username')
-          <div class="invalid-tooltip">
-            {{$message}}
-          </div>
-        @enderror --}}
         <input type="text" class="form-control @error('username') is-invalid @enderror ?: @error('email') is-invalid @enderror" id="login_email_username" name="login_email_username" value="{{old('username') ?: old('email')}}" placeholder="name@example.com">
         <label for="login_email_username">Email / Username</label>
       </div>
       <div class="form-floating">
         <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{old('password')}}" placeholder="Password">
         <label for="password">Password</label>
-        {{-- @error('password')
+        @error('password')
           <span class="invalid-feedback">{{$message}}</span>
-        @enderror --}}
+        @enderror
       </div>
 
       {{-- <div class="form-check text-start my-3">
