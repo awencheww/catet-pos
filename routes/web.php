@@ -27,3 +27,12 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'customerRegister'])->name('customer.register');
+
+Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])
+            ->name('password.email');
+
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+            ->name('password.reset');
+Route::post('reset-password', [NewPasswordController::class, 'store'])
+            ->name('password.store');

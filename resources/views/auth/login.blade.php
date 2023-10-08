@@ -62,6 +62,7 @@
         <i class="bi bi-arrow-left-square"> Cancel </i>
       </button>
     </a>
+    <p><a href="{{route('forgot.password')}}">Forgot your password?</a> </p>
     <p>Don't have an account yet? <a href="{{route('register')}}">Register now</a> </p>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
   </main>
