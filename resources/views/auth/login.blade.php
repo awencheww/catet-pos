@@ -30,6 +30,16 @@
         <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   @endif
+  @if (Session::has('status'))
+    <script type="text/javascript">
+      Swal.fire({
+        icon: 'success',
+        title: 'Reset Password',
+        text: "{{session()->get('status')}}",
+        // footer: '<a href="">Why do I have this issue?</a>'
+      })
+    </script>
+  @endif
     <form method="POST" action="{{route('auth.login')}}">
       @csrf
       {{-- component form-logo --}}
@@ -38,15 +48,12 @@
       <h1 class="h2 mb-3 fw-normal">Please Login</h1>
 
       <div class="form-floating">
-        <input type="text" class="form-control @error('username') is-invalid @enderror ?: @error('email') is-invalid @enderror" id="login_email_username" name="login_email_username" value="{{old('username') ?: old('email')}}" placeholder="name@example.com">
+        <input type="text" class="form-control @error('username') is-invalid @enderror ?: @error('email') is-invalid @enderror" id="login_email_username" name="login_email_username" value="{{old('login_email_username')}}" placeholder="name@example.com" autofocus>
         <label for="login_email_username">Email / Username</label>
       </div>
       <div class="form-floating">
         <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{old('password')}}" placeholder="Password">
         <label for="password">Password</label>
-        @error('password')
-          <span class="invalid-feedback">{{$message}}</span>
-        @enderror
       </div>
 
       {{-- <div class="form-check text-start my-3">

@@ -40,17 +40,32 @@
                           
                         </button>
                     </form>
-                    <a href="{{route('login')}}">
-                      <button class="btn btn-primary m-1" type="button">
-                        <i class="bi bi-arrow-right-square"> Login </i>
-                      </button>
-                    </a>
-                    {{' or '}}
-                    <a href="{{route('register')}}">
-                      <button class="btn btn-success m-1" type="button">
-                        <i class="bi bi-person-plus"> Register </i>
-                      </button>
-                    </a>
+                    @guest
+                      <a href="{{route('login')}}">
+                        <button class="btn btn-primary m-1" type="button">
+                          <i class="bi bi-arrow-right-square"> Login </i>
+                        </button>
+                      </a>
+                      {{' or '}}
+                      <a href="{{route('register')}}">
+                        <button class="btn btn-success m-1" type="button">
+                          <i class="bi bi-person-plus"> Register </i>
+                        </button>
+                      </a>
+                    @endguest
+
+                    @auth
+                      <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-primary m-1" type="submit">
+                          <i class="bi bi-arrow-left-square"> Logout </i>
+                        </button>
+                      </form>
+                      <span>
+                        <i class="bi bi-person" style="position: relative; top: 1px; top: -.7em;right: -1.5em;font-size: 1.2em"></i>
+                        {{Auth::user()->username}}
+                      </span>
+                    @endauth
                 </div>
             </div>
         </nav>

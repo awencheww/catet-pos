@@ -36,7 +36,7 @@
       <x-form-logo></x-form-logo>
       
       <h3 class="mb-3 fw-normal">RESET YOUR PASSWORD</h3>
-      <p>Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.</p>
+      <p>Lost your password? Please enter your email address. You will receive a link to create a new password via email.</p>
       @if (Session::has('status'))
         <div class="alert alert-success alert-dismissible" role="alert">
             {{ Session::get('status') }}
@@ -47,7 +47,7 @@
         <label for="email">Email</label>
       </div>
 
-      <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Reset Password</button>
+      <button class="btn btn-primary w-100 py-2 mb-2" type="submit">EMAIL PASSWORD RESET LINK</button>
     </form>
     <a href="{{route('login')}}">
       <button class="btn btn-outline-secondary w-100 py-2 mb-2">

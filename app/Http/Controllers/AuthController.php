@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 class AuthController extends Controller
 {
@@ -37,6 +41,20 @@ class AuthController extends Controller
             return redirect()->intended()->with('success', 'Welcome our valued Customer '.$request->username ?: $request->email.'!');
         }
         return redirect()->back()->with('error', 'Account Password is Incorrect.');
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->intended();
     }
 
     // register view
@@ -81,7 +99,6 @@ class AuthController extends Controller
     public function sendResetPasswordLink(Request $request): RedirectResponse
     {
         $request->validate([
-            // 'username' => 'required|string',
             'email' => 'required|email',
         ]);
 
@@ -94,6 +111,51 @@ class AuthController extends Controller
 
         return $status == Password::RESET_LINK_SENT
                     ? back()->with('status', __($status))
+                    : back()->withInput($request->only('email'))
+                            ->withErrors(['email' => __($status)]);
+    }
+
+    /**
+     * Display the password reset view.
+     */
+    public function passwordResetRequest(Request $request): View
+    {
+        return view('auth.reset-password', ['request' => $request]);
+    }
+
+    /**
+     * Handle an incoming new password request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function passwordReset(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        // Here we will attempt to reset the user's password. If it is successful we
+        // will update the password on an actual user model and persist it to the
+        // database. Otherwise we will parse the error and return the response.
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        // If the password was successfully reset, we will redirect the user back to
+        // the application's home authenticated view. If there is an error we can
+        // redirect them back to where they came from with their error message.
+        return $status == Password::PASSWORD_RESET
+                    ? redirect('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
                             ->withErrors(['email' => __($status)]);
     }
