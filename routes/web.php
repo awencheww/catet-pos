@@ -19,6 +19,10 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
+
 // Authentication routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -37,7 +41,10 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 });

@@ -13,6 +13,7 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <x-fav-icon></x-fav-icon>
     <x-css-link></x-css-link>
+    <script src="{{asset('assets/sweetalert2/sweetalert2.min.js')}}"></script>
     <!-- Custom styles for this template -->
     <link href="{{ asset('assets/custom/css/dashboard.css') }}" rel="stylesheet">
   </head>
@@ -20,6 +21,27 @@
     <x-toggle-theme>
       <x-slot:title>{{'Toggle Theme'}}</x-slot:title>
     </x-toggle-theme>
+    {{-- sweetalert toast --}}
+    @if ($message = Session::get('success'))
+      <script type="text/javascript">
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+
+        Toast.fire({
+          icon: 'success',
+          title: '{{ $message }}'
+        })
+      </script>
+    @endif
 
     
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">

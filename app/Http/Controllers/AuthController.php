@@ -38,7 +38,11 @@ class AuthController extends Controller
         if($userAuth) {
             $request->session()->regenerate();
             // redirect to homepage
-            return redirect()->intended()->with('success', 'Welcome our valued Customer '.$request->username ?: $request->email.'!');
+            if(auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
+                return redirect('dashboard')->with('success', 'Welcome Admin/Cashier '.auth()->user()->username.'!');
+            } else {
+                return redirect()->intended()->with('success', 'Welcome our valued Customer '.auth()->user()->username.'!');
+            }
         }
         return redirect()->back()->with('error', 'Account Password is Incorrect.');
     }
@@ -48,13 +52,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
-        return redirect()->intended();
+        if(auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
+            Auth::guard('web')->logout();
+            return redirect('login');
+        } else {
+            Auth::guard('web')->logout();
+            return redirect()->intended();
+        }
     }
 
     // register view
