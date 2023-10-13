@@ -32,13 +32,13 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.password');
     Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])
-                ->name('password.email');
+        ->name('password.email');
 
     Route::get('reset-password/{token}', [AuthController::class, 'passwordResetRequest'])
-                ->name('password.reset');
+        ->name('password.reset');
 
     Route::post('password-reset', [AuthController::class, 'passwordReset'])
-                ->name('password.store');
+        ->name('password.store');
 });
 
 Route::middleware('auth')->group(function () {

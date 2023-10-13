@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Customer;
-use Illuminate\View\View;
-use Illuminate\Support\Str;
+use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
@@ -35,15 +35,16 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
         $userAuth = Auth::attempt($credentials);
-        if($userAuth) {
+        if ($userAuth) {
             $request->session()->regenerate();
             // redirect to homepage
-            if(auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
+            if (auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
                 return redirect('dashboard')->with('success', 'Welcome Admin/Cashier '.auth()->user()->username.'!');
             } else {
                 return redirect()->intended()->with('success', 'Welcome our valued Customer '.auth()->user()->username.'!');
             }
         }
+
         return redirect()->back()->with('error', 'Account Password is Incorrect.');
     }
 
@@ -54,11 +55,13 @@ class AuthController extends Controller
     {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        if(auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
+        if (auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
             Auth::guard('web')->logout();
+
             return redirect('login');
         } else {
             Auth::guard('web')->logout();
+
             return redirect()->intended();
         }
     }
@@ -88,6 +91,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'created_at' => now('Asia/Manila'),
         ]);
+
         return redirect()->back()->with('success', 'You are Successfully registered! Enjoy your Shopping.');
     }
 
@@ -118,7 +122,7 @@ class AuthController extends Controller
         return $status == Password::RESET_LINK_SENT
                     ? back()->with('status', __($status))
                     : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => __($status)]);
     }
 
     /**
@@ -163,6 +167,6 @@ class AuthController extends Controller
         return $status == Password::PASSWORD_RESET
                     ? redirect('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => __($status)]);
     }
 }

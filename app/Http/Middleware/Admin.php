@@ -19,6 +19,7 @@ class Admin
         if (Auth::user() && (Auth::user()->role === 'admin' || Auth::user()->role === 'cashier')) {
             return $next($request);
         }
+
         return abort(403);
     }
 }
