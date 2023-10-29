@@ -1,5 +1,6 @@
 @extends('layouts.dashboard')
 @section('header')
+    @include('dashboard.partials.svg')
     @include('dashboard.partials.header')
 @endsection
 @section('content')

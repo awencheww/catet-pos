@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +49,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    // Route::resource('users', UserController::class);
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::post('/users/{id}', [UserController::class, 'deleteUser'])->name('users.destroy');
 });

@@ -52,28 +52,28 @@
       </h6>
       <ul class="nav flex-column mb-auto">
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
+          <x-nav-link>
             <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
             Current month
-          </a>
+          </x-nav-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
+          <x-nav-link>
             <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
             Last quarter
-          </a>
+          </x-nav-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
+          <x-nav-link>
             <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
             Social engagement
-          </a>
+          </x-nav-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
+          <x-nav-link>
             <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
             Year-end sale
-          </a>
+          </x-nav-link>
         </li>
       </ul>
 
@@ -81,22 +81,28 @@
 
       <ul class="nav flex-column mb-auto">
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
-            <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
-            Settings
-          </a>
+          <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+            <i class="bi bi-person-plus"></i>
+            User
+          </x-nav-link>
         </li>
         <li class="nav-item">
-          @auth
-            <form action="{{route('logout')}}" method="POST">
-              @csrf
-              <button class="nav-link d-flex align-items-center gap-2" type="submit">
-                <svg class="bi"><use xlink:href="#door-closed"/></svg>
-                Logout
-              </button>
-            </form>
-          @endauth
+          <x-nav-link>
+            <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
+            Settings
+          </x-nav-link>
         </li>
+        @auth
+          <form action="{{route('logout')}}" method="POST">
+            <li class="nav-item">
+                @csrf
+                <button class="nav-link d-flex align-items-center gap-2" type="submit">
+                  <svg class="bi"><use xlink:href="#door-closed"/></svg>
+                  Logout
+                </button>
+              </li>
+          </form>
+        @endauth
       </ul>
     </div>
   </div>

@@ -89,7 +89,7 @@ class AuthController extends Controller
         Customer::create([
             'user_id' => $user->id,
             'name' => $request->name,
-            'created_at' => now('Asia/Manila'),
+            // 'created_at' => now('Asia/Manila'),
         ]);
 
         return redirect()->back()->with('success', 'You are Successfully registered! Enjoy your Shopping.');

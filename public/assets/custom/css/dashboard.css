@@ -1,5 +1,6 @@
-li.nav-item:hover {
-  background-color: pink;
+li.nav-item i {
+  font-size: 16px;
+  display: flex;
 }
 
 .bd-placeholder-img {
@@ -82,7 +83,7 @@ li.nav-item:hover {
 /* end from inline style */
 
 .bi {
-  display: inline-block;
+  display: inline-flex;
   width: 1rem;
   height: 1rem;
 }
@@ -108,7 +109,12 @@ li.nav-item:hover {
 }
 
 .sidebar .nav-link.active {
-  color: #2470dc;
+  color: #000;
+  background-color: pink;
+}
+
+.sidebar .nav-link:hover {
+  color: #000;
   background-color: pink;
 }
 

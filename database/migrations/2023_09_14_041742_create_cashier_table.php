@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,8 +19,7 @@ return new class() extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->datetime('created_at')->nullable();
-            $table->timestamp('updated_at', $precision = 0);
+            $table->timestamps();
         });
     }
 
@@ -30,6 +28,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cashier');
+        Schema::dropIfExists('customers');
     }
 };

@@ -1,0 +1,9 @@
+<div>
+  {{$user->id}}
+  {{$user->user_id}}
+  {{$user->name}}
+  {{$user->email}}
+  {{$user->role}}
+  {{$user->username}}
+  {{$user->password}}
+</div>
