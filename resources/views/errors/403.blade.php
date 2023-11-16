@@ -27,7 +27,7 @@
           </div>
           <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
             <p>You don't have right access to this page.</p>
-            @if (Auth::user()->role === 'admin' || Auth::user()->role === 'cashier')
+            @if (Auth::user() && (Auth::user()->role === 'admin' || Auth::user()->role === 'cashier'))
               <a style="color:blueviolet;" class="underline" href="{{route('dashboard')}}">Back to Dashboard</a>
             @else
               <a style="color:blueviolet;" class="underline" href="{{route('home')}}">Back to Home Page</a>
