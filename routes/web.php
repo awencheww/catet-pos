@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\User;
+use App\Models\Cashier;
 use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CashierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 
@@ -22,10 +23,32 @@ use App\Http\Controllers\DashboardController;
 */
 
 Route::get('/', function () {
+    if(auth()) {
+        $id = auth()->id();
+        $customer = Customer::where('user_id', $id)->first();
+        $cashier = Cashier::where('user_id', $id)->first();
+        if($customer && blank($customer->name)) {
+            return redirect()->route('customer.profile');
+        }
+        if($cashier && blank($cashier->name)) {
+            return redirect()->route('cashier.profile');
+        }
+    }
     return view('home');
 })->name('home');
 
 Route::get('/home', function () {
+    if(auth()) {
+        $id = auth()->id();
+        $customer = Customer::where('user_id', $id)->first();
+        $cashier = Cashier::where('user_id', $id)->first();
+        if($customer && blank($customer->name)) {
+            return redirect()->route('customer.profile');
+        }
+        if($cashier && blank($cashier->name)) {
+            return redirect()->route('cashier.profile');
+        }
+    }
     return view('home');
 })->name('home');
 

@@ -71,12 +71,12 @@ class UserController extends Controller
 
     public function adminSettings()
     {
-        $admin = User::findOrFail(auth()->user()->id);
-        return view('dashboard.admin.settings', compact('admin'));
+        return view('dashboard.admin.settings');
     }
 
-    public function updateSettings(Request $request, $id)
+    public function updateSettings(Request $request)
     {
+        $id = auth()->id();
         $user = User::findOrFail($id);
 
         $request->validate([

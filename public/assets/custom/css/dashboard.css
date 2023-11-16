@@ -113,11 +113,15 @@ li.nav-item i {
   font-style: italic;
   letter-spacing: 1.2px;
   background-color: hotpink;
+  font-weight: 700;
 }
 
 .sidebar .nav-link:hover {
   color: #000;
   background-color: hotpink;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 1.2px;
 }
 
 .sidebar-heading {

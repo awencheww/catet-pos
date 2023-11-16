@@ -17,9 +17,9 @@
       <div class="container-fluid">
         <h2>Update Admin Settings</h2>
         <div class="row g-3">
-          <form action="{{route('admin.update', $admin->id)}}" method="POST" class="row g-3">
+          <form action="{{route('admin.update')}}" method="POST" class="row g-3">
             @csrf
-            @if (isset($admin))
+            @if ($admin = Auth::user())
               <div class="row g-3">
                 <div class="col-md-6">
                   <label for="username" class="form-label">Username</label>

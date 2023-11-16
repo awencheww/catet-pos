@@ -12,18 +12,8 @@
         <script src="{{asset('assets/sweetalert2/sweetalert2.min.js')}}"></script>
     </head>
     <body>
-        <!-- Navigation-->
-        {{-- TODO: Need to redirect customer to complete their profile --}}
-        {{-- @if ($customer = Session::get('customer'))
-          @if ($customer->name == '' || $customer->address == '' || $customer->phone_number == '')
-            <script>
-              window.addEventListener('click', function() {
-                window.location.href = "{{ route('customer.profile') }}";
-              } ());
-            </script>
-          @endif
-        @endif --}}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light bg-body-tertiary sticky-top">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#!"><img src="{{ asset('assets/icon/fav-icon.png') }}" alt="Catet's Sweets & Cakes" width="87" height="40"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
