@@ -57,7 +57,7 @@
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a class="btn btn-primary" href="{{route('cashier.forgot.password')}}" id="btnResetPassword">Reset Password</a>
+              <a class="btn btn-primary" href="{{route('cashier.reset.password')}}" id="btnResetPassword">Reset Password</a>
             </div>
           </form>
         </div>
@@ -82,7 +82,7 @@
                 confirmButtonText: 'Continue',
               }).then(function (result) {
                 if (result.isConfirmed) {
-                  window.location.href = "{{route('customer.forgot.password')}}";
+                  window.location.href = "{{route('cashier.reset.password')}}";
                 }
               })
             }

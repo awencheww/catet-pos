@@ -19,7 +19,7 @@
         <div class="col-lg-6">
           <div class="row">
             <div class="col-lg-4 mb-1">
-              <button type="button" class="btn btn-primary"><i class="bi bi-person-plus"></i> Add Customer</button>
+              <a href="{{route('customer.add')}}" type="button" class="btn btn-primary"><i class="bi bi-person-plus"></i> Add New</a>
             </div>
             <div class="col-lg-8">
               <form method="GET" action="{{ route('/customers') }}" accept-charset="UTF-8" role="search">

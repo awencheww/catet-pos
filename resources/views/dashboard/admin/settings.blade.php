@@ -39,7 +39,7 @@
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a class="btn btn-primary" href="{{route('cashier.forgot.password')}}" id="btnResetPassword">Reset Password</a>
+              <a class="btn btn-primary" href="{{route('admin.reset.password')}}" id="btnResetPassword">Reset Password</a>
             </div>
           </form>
         </div>
@@ -51,6 +51,25 @@
       <script>
         document.addEventListener('readystatechange', function() {
           
+          var resetPass = document.querySelector("#btnResetPassword");
+          resetPass.addEventListener('click', function(e) {
+            e.preventDefault();
+            if(e.currentTarget) {
+              Swal.fire({
+                title: 'Reset Password',
+                text: "This will log you out and make sure you have your Email login to Access reset link.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Continue',
+              }).then(function (result) {
+                if (result.isConfirmed) {
+                  window.location.href = "{{route('customer.reset.password')}}";
+                }
+              })
+            }
+          })
 
           const Toast = Swal.mixin({
             toast: true,

@@ -49,7 +49,7 @@ class CashierController extends Controller
         return redirect()->back()->with('success', 'User Profile successfully Updated!');
     }
 
-    public function forgotPassword(Request $request)
+    public function resetPassword(Request $request)
     {
         $auth = new AuthController();
         $auth->logout($request);

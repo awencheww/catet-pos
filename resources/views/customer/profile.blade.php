@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Email</label>
+                <label for="inputEmail4" class="form-label">Email <span class="text-danger">*Recommended for Resetting Password</span></label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="inputEmail4" value="{{$customer->email}}">
                 @error('email') <span class="invalid-feedback">{{$message}}</span> @enderror
               </div>
@@ -49,14 +49,14 @@
                 @error('phone_number') <span class="invalid-feedback">{{$message}}</span> @enderror
               </div>
               <div class="col-8">
-                <label for="inputAddress" class="form-label">Address</label>
+                <label for="inputAddress" class="form-label">Complete Address</label>
                 <input type="text" class="form-control @error('address') is-invalid @enderror" name="address" id="inputAddress" placeholder="1234 Main St, Brgy. San Juan, Sample City, Surigao del Norte, 8400" value="{{$customer->address}}">
                 @error('address') <span class="invalid-feedback">{{$message}}</span> @enderror
               </div>
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a class="btn btn-primary" href="{{route('customer.forgot.password')}}" id="btnResetPassword">Reset Password</a>
+              <a class="btn btn-primary" href="{{route('customer.reset.password')}}" id="btnResetPassword">Reset Password</a>
             </div>
           </form>
         </div>
@@ -81,7 +81,7 @@
                 confirmButtonText: 'Continue',
               }).then(function (result) {
                 if (result.isConfirmed) {
-                  window.location.href = "{{route('customer.forgot.password')}}";
+                  window.location.href = "{{route('customer.reset.password')}}";
                 }
               })
             }

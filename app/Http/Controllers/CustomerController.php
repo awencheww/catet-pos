@@ -81,7 +81,36 @@ class CustomerController extends Controller
         return redirect()->back()->with('success', 'Customer record successfully Updated!');
     }
 
-    public function forgotPassword(Request $request)
+    public function addCustomer()
+    {
+        return view('customer.add');
+    }
+
+    public function storeCustomer(Request $request)
+    {
+        $request->validate([
+            'email' => 'unique:users,email',
+            'username' => 'required_without:email|string|min:3|max:20|unique:users,username',
+            'name' => 'required',
+            'phone_number' => 'required|numeric|digits:11',
+            'address' => 'required',
+        ]);
+        $email =
+        $user = User::create([
+            'username' => $request->username,
+            'email' => (blank($request->email) ? '' : $request->email),
+            'password' => 'customer',
+        ]);
+        Customer::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+        ]);
+        return redirect()->back()->with("success", "Customer Added Successfully!");
+    }
+
+    public function resetPassword(Request $request)
     {
         $auth = new AuthController();
         $auth->logout($request);
