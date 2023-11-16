@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,16 @@ return new class extends Migration
     {
         Schema::create('sales_order', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('product_id')->nullable()->constrained('product')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('payment_id')->nullable()->constrained('payments')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
+            $table->integer('quantity')->default(0);
+            $table->decimal('price')->default(0.00);
+            $table->decimal('total_amount')->default(0.00);
+            $table->decimal('discount')->default(0.00);
+            $table->decimal('net_total')->default(0.00);
+            $table->date('sales_date')->default(now('Asia/Manila'));
         });
     }
 

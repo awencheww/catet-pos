@@ -10,9 +10,11 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
+        Schema::create('sales_order_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->foreignId('sales_order_id')->nullable()->constrained('sales_order')->nullOnDelete()->cascadeOnUpdate();
+            $table->integer('sugar_content')->nullable();
+            $table->string('custom_name');
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('sales_order_details');
     }
 };

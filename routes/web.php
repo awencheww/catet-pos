@@ -108,4 +108,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/customer/edit/{id}', [CustomerController::class, 'editCustomer'])->name('/customer/edit');
     Route::post('/customer/update/{id}', [CustomerController::class, 'saveCustomer'])->name('/customer/update');
     Route::post('/customer/destroy/{id}', [CustomerController::class, 'deleteCustomer'])->name('/customer/destroy');
+
+    //Category
+
 });
