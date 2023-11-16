@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Cashier;
+use App\Models\Customer;
+use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Auth\Events\PasswordReset;
 
 class AuthController extends Controller
 {
@@ -37,11 +39,20 @@ class AuthController extends Controller
         $userAuth = Auth::attempt($credentials);
         if ($userAuth) {
             $request->session()->regenerate();
+            $customer = Customer::where('user_id', auth()->user()->id)->first();
+            $cashier = Cashier::where('user_id', auth()->user()->id)->first();
             // redirect to homepage
             if (auth()->user()->role === 'admin' || auth()->user()->role === 'cashier') {
-                return redirect('dashboard')->with('success', 'Welcome Admin/Cashier '.auth()->user()->username.'!');
+                if(auth()->user()->role === 'cashier' && ($cashier->name == null || $cashier->address == null || $cashier->phone_number == null)) {
+                    return redirect()->route('cashier.profile')->with('success', 'Welcome '.auth()->user()->username.'!');
+                }
+                return redirect()->intended(RouteServiceProvider::ADMIN)->with('success', 'Welcome '.auth()->user()->username.'!');
             } else {
-                return redirect()->intended()->with('success', 'Welcome our valued Customer '.auth()->user()->username.'!');
+
+                if($customer->name == null || $customer->address == null || $customer->phone_number == null) {
+                    return redirect()->route('customer.profile')->with('success', 'Welcome our valued Customer '.auth()->user()->username.'!');
+                }
+                return redirect()->route('home')->with(['customer' => $customer, 'success' => 'Welcome our valued Customer '.auth()->user()->username.'!']);
             }
         }
 
@@ -77,7 +88,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|min:6',
-            'username' => 'required|string|min:3|max:100|unique:users,username',
+            'username' => 'required|string|min:3|max:20|unique:users,username',
             'email' => 'required|unique:users,email',
             'password' => 'required|string|min:6|max:255|confirmed',
         ]);

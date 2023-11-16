@@ -1,9 +1,13 @@
 <?php
 
+use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -32,6 +36,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/register', [AuthController::class, 'customerRegister'])->name('customer.register');
 
+    //forgot password
     Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot.password');
     Route::post('forgot-password', [AuthController::class, 'sendResetPasswordLink'])
         ->name('password.email');
@@ -45,12 +50,28 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    //Customers
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::get('/customer/forgot-password', [CustomerController::class, 'forgotPassword'])->name('customer.forgot.password');
+    Route::post('/customer/update', [CustomerController::class, 'updateCustomer'])->name('customer.update');
 });
 
 Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-    // Route::resource('users', UserController::class);
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
-    Route::post('/users/{id}', [UserController::class, 'deleteUser'])->name('users.destroy');
+    //User Admin or Cashier routes
+    Route::get('/users', [UserController::class, 'index'])->name('/users');
+    Route::get('/user/edit/{id}', [UserController::class, 'editUser'])->name('/user/edit');
+    Route::post('/user/update/{id}', [UserController::class, 'updateUser'])->name('user.update');
+    Route::post('/user/destroy/{id}', [UserController::class, 'deleteUser'])->name('/user/destroy');
+
+    // Cashier Routes
+    Route::get('/cashier/profile', [CashierController::class, 'profile'])->name('cashier.profile');
+    Route::post('/user/update', [CashierController::class, 'updateCashier'])->name('cashier.update');
+    Route::get('/cashier/forgot-password', [CashierController::class, 'forgotPassword'])->name('cashier.forgot.password');
+
+    //User Customer routes
+    Route::get('/customers', [CustomerController::class, 'index'])->name('/customers');
+    Route::get('/customer/edit/{id}', [CustomerController::class, 'editCustomer'])->name('/customer/edit');
+    Route::post('/customer/update/{id}', [CustomerController::class, 'saveCustomer'])->name('/customer/update');
+    Route::post('/customer/destroy/{id}', [CustomerController::class, 'deleteCustomer'])->name('/customer/destroy');
 });

@@ -36,7 +36,6 @@
         icon: 'success',
         title: 'Reset Password',
         text: "{{session()->get('status')}}",
-        // footer: '<a href="">Why do I have this issue?</a>'
       })
     </script>
   @endif
@@ -69,8 +68,8 @@
         <i class="bi bi-arrow-left-square"> Cancel </i>
       </button>
     </a>
-    <p><a href="{{route('forgot.password')}}">Forgot your password?</a> </p>
-    <p>Don't have an account yet? <a href="{{route('register')}}">Register now</a> </p>
+    <p><a href="{{route('forgot.password')}}" class="text-danger text-decoration-none">Forgot your password?</a> </p>
+    <p>Don't have an account yet? <a href="{{route('register')}}" class="text-decoration-none">Register now</a> </p>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
   </main>
 @endsection

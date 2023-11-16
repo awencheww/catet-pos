@@ -16,24 +16,17 @@
         </ol>
       </nav>
       <div class="container">
-        <h2>Edit User</h2>
+        <h2>Edit Customer</h2>
         <div class="row g-3">
-          <form action="{{route('user.update', $user->user_id)}}" method="POST" class="row g-3">
+          <form action="{{route('/customer/update', $user->user_id)}}" method="POST" class="row g-3">
             @csrf
             @if (isset($user))
-            <div class="row g-3">
-              <div class="col-md-3">
-                <label for="role" class="form-label">Select Role</label>
-                <select id="role" class="form-select" aria-label="Default select example">
-                  <option value="cashier" @if($user->role === 'cashier') {{'selected'}} @endif>Cashier</option>
-                  <option value="admin" @if($user->role === 'admin') {{'selected'}} @endif>Admin</option>
-                </select>
-              </div>
-            </div>
-              <div class="col-md-6">
-                <label for="fullname" class="form-label">Full Name</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="fullname" value="{{$user->name}}">
-                @error('name') <span class="invalid-feedback">{{$message}}</span> @enderror
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="fullname" class="form-label">Full Name</label>
+                  <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="fullname" value="{{$user->name}}">
+                  @error('name') <span class="invalid-feedback">{{$message}}</span> @enderror
+                </div>
               </div>
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
@@ -58,7 +51,7 @@
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a href="{{route('/users')}}" type="button" class="btn btn-outline-danger">Cancel</a>
+              <a href="{{route('/customers')}}" type="button" class="btn btn-outline-danger">Cancel</a>
             </div>
           </form>
         </div>

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Shop Homepage</title>
+        <title>Home &#x2022; Catet's Sweets & Cakes</title>
 
         <x-fav-icon></x-fav-icon>
         <x-css-link></x-css-link>
@@ -13,6 +13,16 @@
     </head>
     <body>
         <!-- Navigation-->
+        {{-- TODO: Need to redirect customer to complete their profile --}}
+        {{-- @if ($customer = Session::get('customer'))
+          @if ($customer->name == '' || $customer->address == '' || $customer->phone_number == '')
+            <script>
+              window.addEventListener('click', function() {
+                window.location.href = "{{ route('customer.profile') }}";
+              } ());
+            </script>
+          @endif
+        @endif --}}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="#!"><img src="{{ asset('assets/icon/fav-icon.png') }}" alt="Catet's Sweets & Cakes" width="87" height="40"></a>
@@ -31,15 +41,12 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="d-flex me-auto">
-                        <button class="btn text-dark" type="submit">
-                          Shopping Cart
-                          <i class="bi-cart-fill me-1" style="font-size: 1.3em;">
-                            <span class="badge bg-info text-white ms-1 rounded-pill" style="top:-1.3em; left:-1.45em; font-size:.5em">500</span>
-                          </i>
-                          
-                        </button>
-                    </form>
+                    <a href="{{ route('/users') }}" class="me-auto text-decoration-none nav-link d-flex align-items-center gap-2">
+                      Your Tray
+                      <i class="bi-cart4 me-1" style="font-size: 1.3em;">
+                      </i>
+                      <span class="badge bg-info text-white ms-1 rounded-pill" style="position: relative; top:-1.45em; left:-2.2em; font-size:.5em">500</span>
+                    </a>
                     @guest
                       <a href="{{route('login')}}">
                         <button class="btn btn-primary m-1" type="button">
@@ -57,14 +64,24 @@
                     @auth
                       <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="btn btn-primary m-1" type="submit">
+                        <button class="btn btn-outline-danger btn-sm m-1" type="submit">
                           <i class="bi bi-arrow-left-square"> Logout </i>
                         </button>
                       </form>
-                      <span>
-                        <i class="bi bi-person" style="position: relative; top: 1px; top: -.7em;right: -1.5em;font-size: 1.2em"></i>
-                        {{Auth::user()->username}}
-                      </span>
+                      
+                      @if (Auth::user()->role == 'admin' || Auth::user()->role == 'cashier')
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline-primary btn-sm">
+                          <i class="bi bi-person-circle">
+                            {{Auth::user()->username}}
+                          </i>
+                        </a>
+                      @else
+                        <a href="{{ route('customer.profile') }}" class="btn btn-outline-primary btn-sm">
+                          <i class="bi bi-person-circle">
+                            {{Auth::user()->username}}
+                          </i>
+                        </a>
+                      @endif
                     @endauth
                 </div>
             </div>
@@ -72,30 +89,9 @@
         <!-- Header-->
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
-              {{-- sweetalert toast --}}
-              @if ($message = Session::get('success'))
-                <script type="text/javascript">
-                  const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                      toast.addEventListener('mouseenter', Swal.stopTimer)
-                      toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                  })
-
-                  Toast.fire({
-                    icon: 'success',
-                    title: '{{ $message }}'
-                  })
-                </script>
-              @endif
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">Shop in style</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                    <p class="lead fw-normal text-white-50 mb-0">With this shop homepage template</p>
                 </div>
             </div>
         </header>
@@ -308,5 +304,26 @@
         </footer>
         
         <x-body-js-link></x-body-js-link>
+        {{-- sweetalert toast --}}
+        @if ($message = Session::get('success'))
+          <script type="text/javascript">
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            })
+
+            Toast.fire({
+              icon: 'success',
+              title: '{{ $message }}'
+            })
+          </script>
+        @endif
     </body>
 </html>

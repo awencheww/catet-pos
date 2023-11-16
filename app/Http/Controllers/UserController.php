@@ -6,8 +6,7 @@ use App\Models\User;
 use App\Models\Cashier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,31 +15,57 @@ class UserController extends Controller
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
-            $users = DB::table('users')->distinct()
+            $users = User::query()->distinct()
                         ->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')
                             ->where('cashiers.name', 'LIKE', "%$keyword%")
                             ->orWhere('cashiers.address', 'LIKE', "%$keyword%")
                             ->orWhere('users.username', 'LIKE', "%$keyword%")
                             ->orWhere('users.email', 'LIKE', "%$keyword%")
-                            ->latest('users.created_at')->paginate($perPage);
+                            ->latest('users.created_at')->fastPaginate($perPage);
         } else {
-            $users = DB::table('users')->distinct()
-                        ->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')
-                        ->paginate($perPage);
+            $users = User::query()->distinct()
+                            ->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')
+                            ->latest('users.created_at')
+                            ->fastPaginate($perPage);
         }
         return view('user.index', compact('users'));
     }
 
     public function deleteUser($id)
     {
-        // DB::delete('delete from users where id = ?', [$id]);
-        DB::table('users')->where('id', '=', $id)->delete();
-        return redirect('users.index')->with('success', 'User successfully deleted!');
+        User::findOrFail($id)->delete();
+        abort_unless(Auth::user()->role === 'admin', 403);
+        return redirect()->back()->with('success', "User successfully deleted.");
     }
 
-    public function edit($id)
+    public function editUser($id)
+    {
+        $user = User::query()->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')->where('users.id', $id)->first();
+        abort_unless(Auth::user()->role === 'admin', 403);
+        return view('user.edit', ['user' => $user]);
+    }
+
+    public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        return view('user.edit', ['user' => $user]);
+        $customer = Cashier::where('user_id', $id)->first();
+
+        $request->validate([
+            'email' => 'required_without:username|string|email|unique:users,email,'.$id,
+            'username' => 'required_without:email|string|min:3|max:20|unique:users,username,'.$id,
+            'name' => 'required',
+            'phone_number' => 'required|numeric|digits:11',
+            'address' => 'required',
+        ]);
+
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $customer->name = $request->name;
+        $customer->address = $request->address;
+        $customer->phone_number = $request->phone_number;
+
+        $user->save();
+        $customer->save();
+        return redirect()->back()->with('success', 'Customer record successfully Updated!');
     }
 }

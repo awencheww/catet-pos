@@ -110,12 +110,14 @@ li.nav-item i {
 
 .sidebar .nav-link.active {
   color: #000;
-  background-color: pink;
+  font-style: italic;
+  letter-spacing: 1.2px;
+  background-color: hotpink;
 }
 
 .sidebar .nav-link:hover {
   color: #000;
-  background-color: pink;
+  background-color: hotpink;
 }
 
 .sidebar-heading {

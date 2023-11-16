@@ -25,7 +25,7 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link>
+          <x-nav-link :href="route('/customers')" :active="request()->routeIs('/customers')">
             <svg class="bi"><use xlink:href="#people"/></svg>
             Customers
           </x-nav-link>
@@ -80,24 +80,31 @@
       <hr class="my-3">
 
       <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-          <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-            <i class="bi bi-person-plus"></i>
-            User
-          </x-nav-link>
-        </li>
-        <li class="nav-item">
-          <x-nav-link>
-            <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
-            Settings
-          </x-nav-link>
-        </li>
+        @if (Auth::user()->role !== 'cashier')
+          <li class="nav-item">
+            <x-nav-link :href="route('/users')" :active="request()->routeIs('/users')">
+              <i class="bi bi-person-plus"></i>
+              User
+            </x-nav-link>
+          </li>
+        @endif
+        
+        @if (Auth::user()->role === 'cashier')
+          <li class="nav-item">
+            <x-nav-link :href="route('cashier.profile')" :active="request()->routeIs('cashier.profile')">
+              <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
+              Settings
+            </x-nav-link>
+          </li>
+        @endif
+
         @auth
           <form action="{{route('logout')}}" method="POST">
-            <li class="nav-item">
+            @csrf
+            <li class="nav-item nav-link">
                 @csrf
-                <button class="nav-link d-flex align-items-center gap-2" type="submit">
-                  <svg class="bi"><use xlink:href="#door-closed"/></svg>
+                <button class="nav-link d-flex align-items-center gap-2 p-0" type="submit">
+                  <i class="bi bi-arrow-left-square"></i>
                   Logout
                 </button>
               </li>

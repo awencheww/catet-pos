@@ -56,7 +56,7 @@
         <i class="bi bi-arrow-left-square"> Cancel </i>
       </button>
     </a>
-    <p>Already have an account? <a href="{{route('login')}}">Login instead</a> </p>
+    <p>Already have an account? <a href="{{route('login')}}" class="text-decoration-none">Login instead</a> </p>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
   </main>
 @endsection
