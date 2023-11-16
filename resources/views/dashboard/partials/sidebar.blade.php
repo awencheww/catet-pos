@@ -92,10 +92,16 @@
         @if (Auth::user()->role === 'cashier')
           <li class="nav-item">
             <x-nav-link :href="route('cashier.profile')" :active="request()->routeIs('cashier.profile')">
-              <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
-              Settings
+              <i class="bi bi-person-circle"></i>
+              Profile
             </x-nav-link>
           </li>
+        @endif
+        @if (Auth::user()->role === 'admin')
+          <x-nav-link :href="route('admin.settings')" :active="request()->routeIs('admin.settings')">
+            <svg class="bi"><use xlink:href="#gear-wide-connected"/></svg>
+            Settings
+          </x-nav-link>
         @endif
 
         @auth

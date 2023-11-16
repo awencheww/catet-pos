@@ -9,31 +9,23 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 p-3 mb-5">
 
-      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><svg class="bi"><use xlink:href="#house-fill"></use></svg> <a href="{{route('dashboard')}}">Dashboard</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-      </nav>
-      <div class="container">
+      {{-- Breadcrumbs --}}
+      <div class="row p-2">
+        {{ Breadcrumbs::render('/user/edit', $user->id) }}
+      </div>
+
+      <div class="container-fluid">
         <h2>Edit User</h2>
         <div class="row g-3">
           <form action="{{route('user.update', $user->user_id)}}" method="POST" class="row g-3">
             @csrf
             @if (isset($user))
-            <div class="row g-3">
-              <div class="col-md-3">
-                <label for="role" class="form-label">Select Role</label>
-                <select id="role" class="form-select" aria-label="Default select example">
-                  <option value="cashier" @if($user->role === 'cashier') {{'selected'}} @endif>Cashier</option>
-                  <option value="admin" @if($user->role === 'admin') {{'selected'}} @endif>Admin</option>
-                </select>
-              </div>
-            </div>
-              <div class="col-md-6">
-                <label for="fullname" class="form-label">Full Name</label>
-                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="fullname" value="{{$user->name}}">
-                @error('name') <span class="invalid-feedback">{{$message}}</span> @enderror
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="fullname" class="form-label">Full Name</label>
+                  <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="fullname" value="{{$user->name}}">
+                  @error('name') <span class="invalid-feedback">{{$message}}</span> @enderror
+                </div>
               </div>
               <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
@@ -58,7 +50,7 @@
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a href="{{route('/users')}}" type="button" class="btn btn-outline-danger">Cancel</a>
+              <a href="{{url()->previous()}}" type="button" class="btn btn-outline-danger">Cancel</a>
             </div>
           </form>
         </div>
@@ -69,28 +61,6 @@
     @push('dashboard-scripts')
       <script>
         document.addEventListener('readystatechange', function() {
-          var form = document.querySelectorAll(".deleteUser");
-          form.forEach(element => {
-            element.addEventListener('submit', function(e) {
-              e.preventDefault();
-              if(e.currentTarget) {
-                var form = e.currentTarget;
-                Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                }).then(function (result) {
-                  if (result.isConfirmed) {
-                    form.submit();
-                  }
-                })
-              }
-            })
-          });
 
           const Toast = Swal.mixin({
             toast: true,
@@ -110,6 +80,7 @@
               title: "{{Session::get('success')}}",
             })
           @endif
+          
         });
       </script>
     @endpush

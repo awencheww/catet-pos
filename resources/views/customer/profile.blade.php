@@ -7,12 +7,12 @@
     @include('customer.partials.sidebar')
     
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 p-3 mb-5">
-      <div class="container">
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-person-circle"></i> Profile </li>
-          </ol>
-        </nav>
+      <div class="container-fluid">
+        {{-- Breadcrumbs --}}
+        <div class="row p-2">
+          {{ Breadcrumbs::render('customer.profile') }}
+        </div>
+
         <h2>Update Profile</h2>
         <div class="row">
 

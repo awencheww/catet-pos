@@ -8,12 +8,11 @@
     @include('dashboard.partials.sidebar')
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 p-3 mb-5">
-      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><svg class="bi"><use xlink:href="#house-fill"></use></svg> <a href="{{route('dashboard')}}">Dashboard</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-      </nav>
+      {{-- Breadcrumbs --}}
+      <div class="row p-2">
+        {{ Breadcrumbs::render('/users') }}
+      </div>
+
       <h2>List of User</h2>
       <div class="row">
         {{-- Search --}}

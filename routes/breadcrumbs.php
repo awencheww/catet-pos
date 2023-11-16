@@ -1,0 +1,49 @@
+<?php
+
+use App\Models\Cashier;
+use App\Models\Customer;
+use Diglactic\Breadcrumbs\Breadcrumbs;
+use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
+
+// Home
+Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
+    $trail->push('Dashboard', route('dashboard', ['icon' => 'bi bi-house-fill']));
+});
+
+// Home > Customers
+Breadcrumbs::for('/customers', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Customers', route('/customers'));
+});
+
+// Home > Customers > [edit]
+Breadcrumbs::for('/customer/edit', function (BreadcrumbTrail $trail, $id) {
+    $customer = Customer::findOrFail($id);
+    $trail->parent('/customers');
+    $trail->push($customer->name, route('/customer/edit', $customer->user_id));
+});
+
+// Customer Profile
+Breadcrumbs::for('customer.profile', function (BreadcrumbTrail $trail) {
+    $trail->push('Customer Profile', route('customer.profile'));
+});
+
+
+// Home > Users
+Breadcrumbs::for('/users', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Users', route('/users'));
+});
+
+// Home > Users > [edit]
+Breadcrumbs::for('/user/edit', function (BreadcrumbTrail $trail, $id) {
+    $cashier = Cashier::findOrFail($id);
+    $trail->parent('/users');
+    $trail->push($cashier->name, route('/user/edit', $cashier->user_id));
+});
+
+// Home > Admin
+Breadcrumbs::for('admin.settings', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Admin settings', route('admin.settings'));
+});

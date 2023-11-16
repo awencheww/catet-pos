@@ -66,6 +66,28 @@ class UserController extends Controller
 
         $user->save();
         $customer->save();
-        return redirect()->back()->with('success', 'Customer record successfully Updated!');
+        return redirect()->back()->with('success', 'User record successfully Updated!');
+    }
+
+    public function adminSettings()
+    {
+        $admin = User::findOrFail(auth()->user()->id);
+        return view('dashboard.admin.settings', compact('admin'));
+    }
+
+    public function updateSettings(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'email' => 'required_without:username|string|email|unique:users,email,'.$id,
+            'username' => 'required_without:email|string|min:3|max:20|unique:users,username,'.$id,
+        ]);
+
+        $user->username = $request->username;
+        $user->email = $request->email;
+
+        $user->save();
+        return redirect()->back()->with('success', 'Admin Settings Successfully Updated!');
     }
 }

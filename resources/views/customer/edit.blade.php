@@ -9,13 +9,12 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 p-3 mb-5">
 
-      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><svg class="bi"><use xlink:href="#house-fill"></use></svg> <a href="{{route('dashboard')}}">Dashboard</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Users</li>
-        </ol>
-      </nav>
-      <div class="container">
+      {{-- Breadcrumbs --}}
+      <div class="row p-2">
+        {{ Breadcrumbs::render('/customer/edit', $user->id) }}
+      </div>
+      
+      <div class="container-fluid">
         <h2>Edit Customer</h2>
         <div class="row g-3">
           <form action="{{route('/customer/update', $user->user_id)}}" method="POST" class="row g-3">
@@ -51,7 +50,7 @@
             @endif
             <div class="col-12">
               <button type="submit" class="btn btn-success">Save</button>
-              <a href="{{route('/customers')}}" type="button" class="btn btn-outline-danger">Cancel</a>
+              <a href="{{url()->previous()}}" type="button" class="btn btn-outline-danger">Cancel</a>
             </div>
           </form>
         </div>
@@ -62,28 +61,6 @@
     @push('dashboard-scripts')
       <script>
         document.addEventListener('readystatechange', function() {
-          var form = document.querySelectorAll(".deleteUser");
-          form.forEach(element => {
-            element.addEventListener('submit', function(e) {
-              e.preventDefault();
-              if(e.currentTarget) {
-                var form = e.currentTarget;
-                Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                }).then(function (result) {
-                  if (result.isConfirmed) {
-                    form.submit();
-                  }
-                })
-              }
-            })
-          });
 
           const Toast = Swal.mixin({
             toast: true,
@@ -103,6 +80,7 @@
               title: "{{Session::get('success')}}",
             })
           @endif
+
         });
       </script>
     @endpush
