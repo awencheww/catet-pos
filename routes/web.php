@@ -11,6 +11,8 @@ use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +113,11 @@ Route::middleware('admin')->group(function () {
     Route::post('/customer/destroy/{id}', [CustomerController::class, 'deleteCustomer'])->name('/customer/destroy');
 
     //Category
-    // Route::get('/categories', 'CategoryCotnroller@index')->name('user');
     Route::resource('categories', CategoryController::class);
+
+    // Supplier
+    Route::resource('suppliers', SupplierController::class);
+
+    //Payment
+    Route::resource('payments', PaymentController::class);
 });

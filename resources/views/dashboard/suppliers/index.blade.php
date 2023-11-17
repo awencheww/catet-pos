@@ -10,19 +10,19 @@
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 p-3 mb-5">
       {{-- Breadcrumbs --}}
       <div class="row p-2">
-        {{ Breadcrumbs::render('categories') }}
+        {{ Breadcrumbs::render('suppliers') }}
       </div>
 
-      <h2>List of Categories</h2>
+      <h2>List of Suppliers</h2>
       <div class="row">
         {{-- Search --}}
         <div class="col-lg-6">
-          <div class="row">
+          <div class="row g-3">
             <div class="col-lg-4 mb-1">
-              <a href="{{route('categories.create')}}" type="button" class="btn btn-primary"><i class="bi bi-cart-plus"></i> Add New</a>
+              <a href="{{route('suppliers.create')}}" type="button" class="btn btn-primary"><i class="bi bi-person-plus"></i> Add New</a>
             </div>
             <div class="col-lg-8">
-              <form method="GET" action="{{ route('categories.index') }}" accept-charset="UTF-8" role="search">
+              <form method="GET" action="{{ route('suppliers.index') }}" accept-charset="UTF-8" role="search">
                 <div class="input-group mb-3">
                   <button class="btn btn-outline-primary" type="submit" id="button-addon1"><i class="bi bi-search"></i></button>
                   <input type="text" class="form-control border-primary-subtle" name="search" value="{{ request('search') }}" placeholder="Search list.." aria-label="Search list" aria-describedby="button-addon1">
@@ -37,25 +37,33 @@
           <thead class="border-black border-bottom">
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Name</th>
+              <th scope="col">Company</th>
+              <th scope="col">Contact Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone #</th>
+              <th scope="col">Address</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
-          @if (count($categories) > 0)
-            @foreach ($categories as $category)  
+          @if (count($suppliers) > 0)
+            @foreach ($suppliers as $supplier)  
               <tr>
-                <th scope="row">{{$category->id}}</th>
-                <td>{{$category->name}}</td>
+                <th scope="row">{{$supplier->id}}</th>
+                <td>{{$supplier->company}}</td>
+                <td>{{$supplier->contact_name}}</td>
+                <td>{{$supplier->email}}</td>
+                <td>{{$supplier->phone_number}}</td>
+                <td>{{$supplier->address}}</td>
                 <td class="d-flex justify-content-center p-sm-1">
-                  <a href="{{route('categories.edit', $category)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
+                  <a href="{{route('suppliers.edit', $supplier)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
                       <i class="bi bi-pencil-square"></i> 
                   </a>
-                  <form action="{{route('categories.destroy', $category)}}" method="POST" class="delete">
+                  <form action="{{route('suppliers.destroy', $supplier)}}" method="POST" class="delete">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btnDelete btn btn-danger btn-sm">
-                      <i class="bi bi-cart-x"></i>
+                      <i class="bi bi-trash"></i>
                     </button>
                   </form>
                 </td>
@@ -69,7 +77,7 @@
           </tbody>
         </table>
         {{-- PAGINATION --}}
-        {{ $categories->links() }}
+        {{ $suppliers->links() }}
       </div>
     </main>
 

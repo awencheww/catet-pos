@@ -3,6 +3,7 @@
 use App\Models\Cashier;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Supplier;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
@@ -75,4 +76,20 @@ Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, Category $category) {
     $trail->parent('categories');
     $trail->push($category->name, route('categories.edit', $category));
+});
+
+// Dashboard > suppliers
+Breadcrumbs::for('suppliers', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Suppliers', route('suppliers.index'));
+});
+// Dashboard > suppliers > add
+Breadcrumbs::for('suppliers.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('suppliers');
+    $trail->push('Add Supplier', route('suppliers.create'));
+});
+// Dashboard > suppliers > edit
+Breadcrumbs::for('suppliers.edit', function (BreadcrumbTrail $trail, Supplier $supplier) {
+    $trail->parent('suppliers');
+    $trail->push($supplier->contact_name, route('suppliers.edit', $supplier));
 });

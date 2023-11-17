@@ -13,6 +13,18 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
+          <x-nav-link :href="route('payments.index')" :active="request()->routeIs('payments.index')">
+            <i class="bi bi-wallet2"></i>
+            Payments
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
+          <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.index')">
+            <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+            Suppliers
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
           <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Categories

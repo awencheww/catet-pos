@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory(20)->create(['role' => 'cashier', 'password' => 'cashier']);
-        User::factory(20)->create(['role' => 'customer', 'password' => 'customer']);
+        User::factory(1)->create(['username' => 'cham', 'role' => 'cashier', 'password' => 'cashier']);
+        // User::factory(20)->create(['role' => 'customer', 'password' => 'customer']);
     }
 }
