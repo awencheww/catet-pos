@@ -13,9 +13,9 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link>
+          <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
-            Orders
+            Categories
           </x-nav-link>
         </li>
         <li class="nav-item">
@@ -80,14 +80,12 @@
       <hr class="my-3">
 
       <ul class="nav flex-column mb-auto">
-        @if (Auth::user()->role !== 'cashier')
-          <li class="nav-item">
-            <x-nav-link :href="route('/users')" :active="request()->routeIs('/users')">
-              <i class="bi bi-person-plus"></i>
-              User
-            </x-nav-link>
-          </li>
-        @endif
+        <li class="nav-item">
+          <x-nav-link :href="route('/users')" :active="request()->routeIs('/users')">
+            <i class="bi bi-person-plus"></i>
+            User
+          </x-nav-link>
+        </li>
         
         @if (Auth::user()->role === 'cashier')
           <li class="nav-item">

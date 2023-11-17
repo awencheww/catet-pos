@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 
@@ -110,5 +111,6 @@ Route::middleware('admin')->group(function () {
     Route::post('/customer/destroy/{id}', [CustomerController::class, 'deleteCustomer'])->name('/customer/destroy');
 
     //Category
-
+    // Route::get('/categories', 'CategoryCotnroller@index')->name('user');
+    Route::resource('categories', CategoryController::class);
 });

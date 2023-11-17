@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cashier;
+use App\Models\Category;
 use App\Models\Customer;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -54,9 +55,24 @@ Breadcrumbs::for('/user/edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push($cashier->name, route('/user/edit', $cashier->user_id));
 });
 
-
 // Home > Admin
 Breadcrumbs::for('admin.settings', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Admin settings', route('admin.settings'));
+});
+
+// Dashboard > categories
+Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Categories', route('categories.index'));
+});
+// Dashboard > categories > add
+Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('categories');
+    $trail->push('Add Category', route('categories.create'));
+});
+// Dashboard > categories > edit
+Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, Category $category) {
+    $trail->parent('categories');
+    $trail->push($category->name, route('categories.edit', $category));
 });

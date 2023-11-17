@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
-use Illuminate\Auth\Events\Logout;
+use Closure;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class CustomerController extends Controller
 {
@@ -119,15 +121,18 @@ class CustomerController extends Controller
 
     public function deleteCustomer($id)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         User::query()->where('id', '=', $id)->delete();
-        abort_unless(Auth::user()->role === 'admin', 403);
+        // abort_unless(Auth::user()->role === 'admin', 403);
         return redirect()->back()->with('success', "Customer successfully deleted.");
     }
 
     public function editCustomer($id)
     {
         $user = User::query()->rightJoin('customers', 'customers.user_id', '=', 'users.id')->where('users.id', $id)->first();
-        abort_unless(Auth::user()->role === 'admin', 403);
+        // abort_unless(Auth::user()->role === 'admin', 403);
         return view('customer.edit', ['user' => $user]);
     }
 

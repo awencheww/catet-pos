@@ -33,15 +33,19 @@ class UserController extends Controller
 
     public function deleteUser($id)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         User::findOrFail($id)->delete();
-        abort_unless(Auth::user()->role === 'admin', 403);
         return redirect()->back()->with('success', "User successfully deleted.");
     }
 
     public function editUser($id)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('warning', 'Edit Permission denied!');
+        }
         $user = User::query()->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')->where('users.id', $id)->first();
-        abort_unless(Auth::user()->role === 'admin', 403);
         return view('user.edit', ['user' => $user]);
     }
 
@@ -93,6 +97,9 @@ class UserController extends Controller
 
     public function addUser()
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('warning', 'Add Permission denied!');
+        }
         return view('user.add');
     }
 

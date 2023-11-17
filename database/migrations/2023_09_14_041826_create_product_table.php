@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name')->nullable();
             $table->string('code')->nullable();
-            $table->foreignId('category_id')->nullable()->constrained('category')
+            $table->foreignId('category_id')->nullable()->constrained('categories')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->integer('stock_quantity')->default(0);

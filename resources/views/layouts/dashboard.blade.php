@@ -34,27 +34,27 @@
 <script src="{{ asset('assets/bootstrap-5.3.2/js/bootstrap.bundle.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
 <script src="{{ asset('assets/custom/js/dashboard.js') }}"></script>
-
+<script>
+</script>
 @stack('dashboard-scripts')
 {{-- sweetalert toast --}}
-@if ($message = Session::get('success'))
 <script type="text/javascript">
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 2500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
-
-  Toast.fire({
-    icon: 'success',
-    title: '{{ $message }}'
-  })
+  @if ($message = Session::get('success'))
+    Toast.fire({
+      icon: 'success',
+      title: '{{ $message }}'
+    })
+  @endif
 </script>
-@endif
 </html>

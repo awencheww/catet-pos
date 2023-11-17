@@ -112,7 +112,7 @@
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 2500,
             timerProgressBar: true,
             didOpen: function (toast) {
               toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -123,9 +123,24 @@
           @if ($message = Session::get('success'))
             Toast.fire({
               icon: "success",
-              title: "{{Session::get('success')}}",
+              title: "{{ $message }}",
             })
           @endif
+          
+          @if ($message = Session::get('error'))
+            Toast.fire({
+              icon: "error",
+              title: "{{ $message }}",
+            })
+          @endif
+
+          @if ($message = Session::get('warning'))
+            Toast.fire({
+              icon: "warning",
+              title: "{{ $message }}",
+            })
+          @endif
+
         });
       </script>
     @endpush
