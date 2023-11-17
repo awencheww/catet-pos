@@ -12,8 +12,14 @@ return new class () extends Migration {
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('method');
-            $table->string('status');
+            $table->foreignId('sales_order_id')->nullable()->constrained('sales_order')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('purchase_order_id')->nullable()->constrained('purchase_order')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->enum('method', ['cash', 'e-wallet', 'cod'])->default('cash');
+            $table->enum('status', ['paid', 'unpaid', 'partially paid', 'fully paid'])->default('paid');
             $table->string('note')->nullable();
             $table->timestamps();
         });

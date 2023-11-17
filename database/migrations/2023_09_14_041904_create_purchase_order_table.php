@@ -12,9 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('purchase_order', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('product_id')->nullable()->constrained('product')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignId('payment_id')->nullable()->constrained('payments')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('quantity')->default(0);
             $table->decimal('unit_cost')->default(0.00);

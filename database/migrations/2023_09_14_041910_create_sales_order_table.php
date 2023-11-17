@@ -14,7 +14,6 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('product_id')->nullable()->constrained('product')->nullOnDelete()->cascadeOnUpdate();
-            $table->foreignId('payment_id')->nullable()->constrained('payments')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('quantity')->default(0);
             $table->decimal('price')->default(0.00);

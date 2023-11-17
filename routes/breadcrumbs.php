@@ -3,6 +3,7 @@
 use App\Models\Cashier;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Supplier;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -92,4 +93,20 @@ Breadcrumbs::for('suppliers.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('suppliers.edit', function (BreadcrumbTrail $trail, Supplier $supplier) {
     $trail->parent('suppliers');
     $trail->push($supplier->contact_name, route('suppliers.edit', $supplier));
+});
+
+// Dashboard > payments
+Breadcrumbs::for('payments', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('payments', route('payments.index'));
+});
+// Dashboard > payments > add
+Breadcrumbs::for('payments.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('payments');
+    $trail->push('Add Payment', route('payments.create'));
+});
+// Dashboard > payments > edit
+Breadcrumbs::for('payments.edit', function (BreadcrumbTrail $trail, Payment $payment) {
+    $trail->parent('payments');
+    $trail->push($payment->method, route('payments.edit', $payment));
 });

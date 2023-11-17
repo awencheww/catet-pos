@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Product extends Model
 {
     use HasFactory;
     /**
@@ -14,10 +14,11 @@ class Payment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'purchase_order_id',
-        'sales_order_id',
-        'method',
-        'status',
-        'note',
+        'name',
+        'code',
+        'category_id',
+        'stock_quantity',
+        'total_amount',
     ];
+
 }

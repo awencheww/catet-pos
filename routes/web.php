@@ -120,4 +120,7 @@ Route::middleware('admin')->group(function () {
 
     //Payment
     Route::resource('payments', PaymentController::class);
+
+    // Product
+    Route::resource('product', ProductController::class);
 });

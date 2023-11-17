@@ -13,12 +13,6 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('payments.index')" :active="request()->routeIs('payments.index')">
-            <i class="bi bi-wallet2"></i>
-            Payments
-          </x-nav-link>
-        </li>
-        <li class="nav-item">
           <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.index')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Suppliers
@@ -31,7 +25,7 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link>
+          <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
             <svg class="bi"><use xlink:href="#cart"/></svg>
             Products
           </x-nav-link>
@@ -40,6 +34,12 @@
           <x-nav-link :href="route('/customers')" :active="request()->routeIs('/customers')">
             <svg class="bi"><use xlink:href="#people"/></svg>
             Customers
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
+          <x-nav-link :href="route('payments.index')" :active="request()->routeIs('payments.index')">
+            <i class="bi bi-wallet2"></i>
+            Payments
           </x-nav-link>
         </li>
         <li class="nav-item">
