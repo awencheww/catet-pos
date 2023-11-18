@@ -10,15 +10,24 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('product', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('product_name')->nullable();
+            $table->string('description')->nullable();
             $table->string('code')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->integer('stock_quantity')->default(0);
-            $table->decimal('total_amount')->default(0.00);
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
+            $table->string('variant')->nullable();
+            $table->string('image')->nullable();
+            $table->integer('quantity')->default(0);
+            $table->decimal('unit_cost')->default(0.00);
+            $table->decimal('total_cost')->default(0.00);
+            $table->decimal('unit_price')->default(0.00);
+            $table->date('expiry')->default(now('Asia/Manila'));
             $table->timestamps();
         });
     }

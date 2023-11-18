@@ -14,11 +14,18 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'image',
+        'product_name',
+        'description',
         'code',
         'category_id',
-        'stock_quantity',
-        'total_amount',
+        'supplier_id',
+        'variant',
+        'expiry',
+        'unit_price',
+        'unit_cost',
+        'quantity',
+        'total_cost',
     ];
 
 }

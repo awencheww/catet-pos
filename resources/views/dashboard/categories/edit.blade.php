@@ -26,7 +26,7 @@
               @foreach ($fields as $field)
                 <div class="form-group mb-1 col-md-4">
                     <label for="{{ $field }}">{{ ucfirst($field) }}</label>
-                    <input type="text" name="{{ $field }}" id="{{ $field }}" value="{{ old($field, $category->name) }}" class="form-control  @error($field) is-invalid @enderror">
+                    <input type="text" name="{{ $field }}" id="{{ $field }}" value="{{ old($field, $category->category_name) }}" class="form-control  @error($field) is-invalid @enderror">
                     @error($field) <span class="invalid-feedback">{{$message}}</span> @enderror
                 </div>
               @endforeach

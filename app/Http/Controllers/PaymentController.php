@@ -36,9 +36,12 @@ class PaymentController extends Controller
      */
     public function create()
     {
+
         // Detect the needed input fields from the model
         $fields = (new Payment())->getFillable();
         //TODO: MAKE PO AND SO FOR RELATIONSHIP TO DISPLAY IN VIEW TO EDIT
+        // $po = Category::query()->get();
+        // $so = Supplier::query()->get();
         return view('dashboard.payments.create', compact('fields'));
     }
 
@@ -84,6 +87,8 @@ class PaymentController extends Controller
     {
         $fields = $payment->getFillable();
         //TODO: MAKE PO AND SO FOR RELATIONSHIP TO DISPLAY IN VIEW TO EDIT
+        // $po = Category::query()->get();
+        // $so = Supplier::query()->get();
         return view('dashboard.payments.edit', compact('fields', 'payment', 'po', 'so'));
     }
 

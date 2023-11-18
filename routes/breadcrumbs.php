@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Cashier;
+use App\Models\Payment;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
-use App\Models\Payment;
 use App\Models\Supplier;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -76,7 +77,7 @@ Breadcrumbs::for('categories.create', function (BreadcrumbTrail $trail) {
 // Dashboard > categories > edit
 Breadcrumbs::for('categories.edit', function (BreadcrumbTrail $trail, Category $category) {
     $trail->parent('categories');
-    $trail->push($category->name, route('categories.edit', $category));
+    $trail->push($category->category_name, route('categories.edit', $category));
 });
 
 // Dashboard > suppliers
@@ -109,4 +110,20 @@ Breadcrumbs::for('payments.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('payments.edit', function (BreadcrumbTrail $trail, Payment $payment) {
     $trail->parent('payments');
     $trail->push($payment->method, route('payments.edit', $payment));
+});
+
+// Dashboard > products
+Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Products', route('products.index'));
+});
+// Dashboard > products > add
+Breadcrumbs::for('products.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('products');
+    $trail->push('Add Product', route('products.create'));
+});
+// Dashboard > products > edit
+Breadcrumbs::for('products.edit', function (BreadcrumbTrail $trail, Product $product) {
+    $trail->parent('products');
+    $trail->push($product->product_name, route('products.edit', $product));
 });

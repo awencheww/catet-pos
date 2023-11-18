@@ -48,7 +48,7 @@ class SupplierController extends Controller
     {
         // Validate the request using the detected input fields
         $validatedData = $request->validate([
-            'company' => 'string',
+            'company' => '',
             'contact_name' => 'required|string|max:255',
             'email' => 'email|string|unique:suppliers,email',
             'phone_number' => 'required|numeric|digits:11',
@@ -90,7 +90,7 @@ class SupplierController extends Controller
         $validatedData = $request->validate([
             'company' => 'string',
             'contact_name' => 'required|string|max:255',
-            'email' => 'email|string|unique:suppliers,email',
+            'email' => 'email|string|unique:suppliers,email,'.$supplier->id,
             'phone_number' => 'required|numeric|digits:11',
             'address' => 'required',
         ]);

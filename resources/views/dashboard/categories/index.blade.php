@@ -46,7 +46,7 @@
             @foreach ($categories as $category)  
               <tr>
                 <th scope="row">{{$category->id}}</th>
-                <td>{{$category->name}}</td>
+                <td>{{$category->category_name}}</td>
                 <td class="d-flex justify-content-center p-sm-1">
                   <a href="{{route('categories.edit', $category)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
                       <i class="bi bi-pencil-square"></i> 

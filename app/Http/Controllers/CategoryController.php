@@ -17,7 +17,7 @@ class CategoryController extends Controller
         $perPage = 15;
         if($keyword !== null) {
             $categories = Category::query()
-                            ->where('name', 'LIKE', "%$keyword%")
+                            ->where('category_name', 'LIKE', "%$keyword%")
                             ->latest('created_at')->fastPaginate($perPage);
         } else {
             $categories = Category::query()->latest('created_at')
@@ -44,10 +44,10 @@ class CategoryController extends Controller
     {
         // Validate the request using the detected input fields
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'category_name' => 'required|string|max:255',
         ]);
         // Capitalize the first letter of the 'name' attribute
-        $validatedData['name'] = ucwords($validatedData['name']);
+        $validatedData['category_name'] = ucwords($validatedData['category_name']);
         // Create a new category using the validated data
         Category::create($validatedData);
         return redirect()->back()->with("success", "Category Added Successfully!");
@@ -76,9 +76,9 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'category_name' => 'required|string|max:255',
         ]);
-        $validatedData['name'] = ucwords($validatedData['name']);
+        $validatedData['category_name'] = ucwords($validatedData['category_name']);
         $category->update($validatedData);
         return redirect()->back()->with("success", "Category Updated Successfully!");
     }

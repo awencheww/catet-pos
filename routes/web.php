@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,5 +123,5 @@ Route::middleware('admin')->group(function () {
     Route::resource('payments', PaymentController::class);
 
     // Product
-    Route::resource('product', ProductController::class);
+    Route::resource('products', ProductController::class);
 });
