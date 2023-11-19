@@ -42,8 +42,7 @@
             </tr>
           </thead>
           <tbody>
-          @if (count($categories) > 0)
-            @foreach ($categories as $category)  
+            @forelse ($categories as $category)  
               <tr>
                 <th scope="row">{{$category->id}}</th>
                 <td>{{$category->category_name}}</td>
@@ -60,12 +59,11 @@
                   </form>
                 </td>
               </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="8" class="text-center">No record found</td>
-            </tr>
-          @endif
+            @empty
+              <tr>
+                <td colspan="8" class="text-center">No record found</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
         {{-- PAGINATION --}}

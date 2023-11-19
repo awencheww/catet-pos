@@ -27,11 +27,11 @@
 
                   @if ($field == 'image')
                     <div class="row g-3">
-                      <div class="col-md-3 mb-1">
-                        <img id="img-preview" src="" alt="" width="200" height="200" class="img-thumbnail">
-                        <div class="input-group mb-3">
-                          <label for="{{ $field }}" class="input-group-text">Upload {{ ucwords(str_replace('_', ' ', $field)) }}</label>
-                          <input type="file" accept="image/*" onchange="showFile(event)" name="{{ $field }}" id="{{ $field }}" class="form-control  @error($field) is-invalid @enderror">
+                      <div class="col-md-2 mb-1">
+                        <img id="img-preview" src="" alt="" width="250" height="230" class="img-thumbnail cursor-pointer @error($field) is-invalid @enderror" for="{{ $field }}" style="cursor: pointer;">
+                        <div class="mb-3 text-center">
+                          <input type="file" accept="image/*" name="{{ $field }}" id="{{ $field }}" class="form-control  d-none">
+                          <label for="{{ $field }}" class="input-group-text" style="cursor: pointer;">Upload {{ ucwords(str_replace('_', ' ', $field)) }}</label>
                           @error($field) <span class="invalid-feedback">{{$message}}</span> @enderror
                         </div>
                       </div>
@@ -86,7 +86,7 @@
                   @elseif ($field == 'unit_price')
                     <div class="row g-2">
                       <div class="form-group mb-1 col-md-3">
-                        <label for="{{ $field }}" class="mb-1">{{ ucwords(str_replace('_', ' ', $field)) }}</label>
+                        <label for="{{ $field }}" class="mb-1">{{ ucwords(str_replace('_', ' ', $field)) }} (Actual Price to be Shown)</label>
                         <input type="number" min="1" name="{{ $field }}" id="{{ $field }}" value="{{ old($field) }}" class="form-control  @error($field) is-invalid @enderror">
                         @error($field) <span class="invalid-feedback">{{$message}}</span> @enderror
                     </div>
@@ -133,19 +133,22 @@
 
     @push('dashboard-scripts')
       <script>
-        function showFile(e) {
-          var input = e.target;
-
-          var reader = new FileReader();
-          reader.onload = function() {
-            var dataURL = reader.result;
-            var output = document.getElementById('img-preview');
-            output.src = dataURL;
-          };
-          reader.readAsDataURL(input.files[0]);
-        }
-
         document.addEventListener('readystatechange', function() {
+          var input = document.getElementById('image');
+          var imgPreview = document.getElementById('img-preview');
+          imgPreview.onclick = function() {
+            input.click();
+          };
+          input.addEventListener('change', function showFile() {
+            var reader = new FileReader();
+            reader.onload = function() {
+              var dataURL = reader.result;
+              var output = document.getElementById('img-preview');
+              output.src = dataURL;
+            };
+            reader.readAsDataURL(input.files[0]);
+          });
+
           //focus #name element
           let qty = document.getElementById('quantity');
           let unit_cost = document.getElementById('unit_cost');

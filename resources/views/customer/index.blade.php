@@ -48,8 +48,7 @@
             </tr>
           </thead>
           <tbody>
-          @if (count($customers) > 0)
-            @foreach ($customers as $user)  
+            @forelse ($customers as $user)  
               <tr>
                 <th scope="row">{{$user->user_id}}</th>
                 <td>{{$user->name}}</td>
@@ -69,12 +68,11 @@
                   </form>
                 </td>
               </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="8" class="text-center">No record found</td>
-            </tr>
-          @endif
+            @empty
+              <tr>
+                <td colspan="8" class="text-center">No record found</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
         {{-- PAGINATION --}}

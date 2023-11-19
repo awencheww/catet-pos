@@ -46,8 +46,7 @@
             </tr>
           </thead>
           <tbody>
-          @if (count($suppliers) > 0)
-            @foreach ($suppliers as $supplier)  
+            @forelse ($suppliers as $supplier)  
               <tr>
                 <th scope="row">{{$supplier->id}}</th>
                 <td>{{$supplier->company}}</td>
@@ -68,12 +67,11 @@
                   </form>
                 </td>
               </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="8" class="text-center">No record found</td>
-            </tr>
-          @endif
+            @empty
+              <tr>
+                <td colspan="8" class="text-center">No record found</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
         {{-- PAGINATION --}}

@@ -17,9 +17,9 @@ class CashierController extends Controller
             $cashier = Cashier::where('name', 'LIKE', "%$keyword%")
                                 ->orWhere('address', 'LIKE', "%$keyword%")
                                 ->orWhere('phone_number', 'LIKE', "%$keyword%")
-                                ->latest()->paginate($perPage);
+                                ->latest()->fastPaginate($perPage);
         } else {
-            $cashier = Cashier::latest()->paginate($perPage);
+            $cashier = Cashier::latest()->fastPaginate($perPage);
         }
         return view('cashier.index', ['cashier' => $cashier])->with('i', (request()->input('page', 1) - 1) * 5);
     }

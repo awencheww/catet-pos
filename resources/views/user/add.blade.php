@@ -17,10 +17,12 @@
       <div class="container-fluid">
         <h2>Add User</h2>
         <div class="row g-3">
-          <div class="alert alert-info alert-dismissible fade show" role="alert">
+          
+          <div class="alert alert-dismissible alert-info fade show">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             <strong>Note !</strong> After saving, the default password is `<strong>cashier</strong>` or `<strong>admin1234</strong>`, depending on what role is choosen. They can Reset Password later.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
+
           <form action="{{route('user.store')}}" method="POST" class="row g-3">
             @csrf
             

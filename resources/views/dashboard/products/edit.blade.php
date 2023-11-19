@@ -28,11 +28,11 @@
 
                   @if ($field == 'image')
                     <div class="row g-3">
-                      <div class="col-md-4 mb-1">
-                        <img id="img-preview" src="{{ asset('images/'.$product->image) }}" alt="{{ $product->description }}" width="200" height="200" class="img-thumbnail">
-                        <div class="input-group mb-3">
-                          <label for="{{ $field }}" class="input-group-text">Upload {{ ucwords(str_replace('_', ' ', $field)) }}</label>
-                          <input type="file" accept="image/*" onchange="showFile(event)" value="{{ old($field, $product) }}" name="{{ $field }}" id="{{ $field }}" class="form-control  @error($field) is-invalid @enderror">
+                      <div class="col-md-2 mb-1">
+                        <img id="img-preview" src="{{ asset('images/'.$product->image) }}" alt="{{ $product->description }}" width="250" height="230" class="img-thumbnail @error($field) is-invalid @enderror" style="cursor: pointer;">
+                        <div class="mb-3">
+                          <label for="{{ $field }}" class="input-group-text" style="cursor: pointer;">Upload {{ ucwords(str_replace('_', ' ', $field)) }}</label>
+                          <input type="file" accept="image/*" value="{{ old($field, $product) }}" name="{{ $field }}" id="{{ $field }}" class="form-control d-none">
                           @error($field) <span class="invalid-feedback">{{$message}}</span> @enderror
                         </div>
                       </div>
@@ -134,19 +134,22 @@
 
     @push('dashboard-scripts')
       <script>
-        function showFile(e) {
-          var input = e.target;
-
-          var reader = new FileReader();
-          reader.onload = function() {
-            var dataURL = reader.result;
-            var output = document.getElementById('img-preview');
-            output.src = dataURL;
-          };
-          reader.readAsDataURL(input.files[0]);
-        }
-
         document.addEventListener('readystatechange', function() {
+          var input = document.getElementById('image');
+          var imgPreview = document.getElementById('img-preview');
+          imgPreview.onclick = function() {
+            input.click();
+          };
+          input.addEventListener('change', function showFile() {
+            var reader = new FileReader();
+            reader.onload = function() {
+              var dataURL = reader.result;
+              var output = document.getElementById('img-preview');
+              output.src = dataURL;
+            };
+            reader.readAsDataURL(input.files[0]);
+          });
+
           //focus #name element
           let qty = document.getElementById('quantity');
           let unit_cost = document.getElementById('unit_cost');

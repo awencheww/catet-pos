@@ -18,7 +18,7 @@
         <div class="col-lg-6">
           <div class="row g-3">
             <div class="col-lg-4 mb-1">
-              <a href="{{route('products.create')}}" type="button" class="btn btn-primary"><i class="bi bi-person-plus"></i> Add New</a>
+              <a href="{{route('products.create')}}" type="button" class="btn btn-primary"><i class="bi bi-cart-plus"></i> Add New</a>
             </div>
             <div class="col-lg-8">
               <form method="GET" action="{{ route('products.index') }}" accept-charset="UTF-8" role="search">
@@ -51,8 +51,8 @@
             </tr>
           </thead>
           <tbody>
-          @if (count($products) > 0)
-            @foreach ($products as $product)  
+            
+            @forelse ($products as $product)  
               <tr>
                 <td scope="row"><img src="{{asset('images/'.$product->image)}}" alt="{{ $product->description }}" srcset="" width="50" height="50"></td>
                 <td>{{$product->product_name}}</td>
@@ -81,12 +81,11 @@
                 </td>
 
               </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="20" class="text-center">No record found</td>
-            </tr>
-          @endif
+            @empty
+              <tr>
+                <td colspan="20" class="text-center">No record found</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
         {{-- PAGINATION --}}

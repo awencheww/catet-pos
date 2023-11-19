@@ -47,8 +47,7 @@
             </tr>
           </thead>
           <tbody>
-          @if (count($payments) > 0)
-            @foreach ($payments as $payment)  
+            @forelse ($payments as $payment)  
               <tr>
                 <th scope="row">{{$payment->id}}</th>
                 <td>{{$payment->purchase_order_id}}</td>
@@ -69,13 +68,12 @@
                     </button>
                   </form>
                 </td>
+                </tr>
+            @empty
+              <tr>
+                <td colspan="8" class="text-center">No record found</td>
               </tr>
-            @endforeach
-          @else
-            <tr>
-              <td colspan="8" class="text-center">No record found</td>
-            </tr>
-          @endif
+            @endforelse
           </tbody>
         </table>
         {{-- PAGINATION --}}

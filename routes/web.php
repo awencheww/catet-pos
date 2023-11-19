@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     if(auth()) {
         $id = auth()->id();
         $customer = Customer::where('user_id', $id)->first();
@@ -38,10 +39,66 @@ Route::get('/', function () {
             return redirect()->route('cashier.profile');
         }
     }
-    return view('home');
+    $keyword = $request->get('search');
+    $perPage = 15;
+    if($keyword !== null) {
+        $products = DB::table('products')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                        ->select(
+                            'products.id as product_id',
+                            'product_name',
+                            'description',
+                            'category_name',
+                            'company',
+                            'contact_name',
+                            'code',
+                            'variant',
+                            'image',
+                            'quantity',
+                            'unit_cost',
+                            'total_cost',
+                            'unit_price',
+                            'expiry',
+                        )
+                        ->where('product_name', 'LIKE', "%$keyword%")
+                        ->orWhere('code', 'LIKE', "%$keyword%")
+                        ->orWhere('products.id', 'LIKE', "%$keyword%")
+                        ->orWhere('category_name', 'LIKE', "%$keyword%")
+                        ->orWhere('company', 'LIKE', "%$keyword%")
+                        ->orWhere('total_amount', 'LIKE', "%$keyword%")
+                        ->orWhere('unit_cost', 'LIKE', "%$keyword%")
+                        ->orWhere('quantity', 'LIKE', "%$keyword%")
+                        ->orWhere('total_cost', 'LIKE', "%$keyword%")
+                        ->orWhere('unit_price', 'LIKE', "%$keyword%")
+                        ->latest('products.created_at')->paginate($perPage);
+    } else {
+        $products = DB::table('products')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                        ->select(
+                            'products.id as product_id',
+                            'product_name',
+                            'description',
+                            'category_name',
+                            'company',
+                            'contact_name',
+                            'code',
+                            'variant',
+                            'image',
+                            'quantity',
+                            'unit_cost',
+                            'total_cost',
+                            'unit_price',
+                            'expiry',
+                        )
+                        ->latest('products.created_at')
+                        ->paginate($perPage);
+    }
+    return view('home', compact('products'));
 })->name('home');
 
-Route::get('/home', function () {
+Route::get('/home', function (Request $request) {
     if(auth()) {
         $id = auth()->id();
         $customer = Customer::where('user_id', $id)->first();
@@ -53,7 +110,63 @@ Route::get('/home', function () {
             return redirect()->route('cashier.profile');
         }
     }
-    return view('home');
+    $keyword = $request->get('search');
+    $perPage = 15;
+    if($keyword !== null) {
+        $products = DB::table('products')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                        ->select(
+                            'products.id as product_id',
+                            'product_name',
+                            'description',
+                            'category_name',
+                            'company',
+                            'contact_name',
+                            'code',
+                            'variant',
+                            'image',
+                            'quantity',
+                            'unit_cost',
+                            'total_cost',
+                            'unit_price',
+                            'expiry',
+                        )
+                        ->where('product_name', 'LIKE', "%$keyword%")
+                        ->orWhere('code', 'LIKE', "%$keyword%")
+                        ->orWhere('products.id', 'LIKE', "%$keyword%")
+                        ->orWhere('category_name', 'LIKE', "%$keyword%")
+                        ->orWhere('company', 'LIKE', "%$keyword%")
+                        ->orWhere('total_amount', 'LIKE', "%$keyword%")
+                        ->orWhere('unit_cost', 'LIKE', "%$keyword%")
+                        ->orWhere('quantity', 'LIKE', "%$keyword%")
+                        ->orWhere('total_cost', 'LIKE', "%$keyword%")
+                        ->orWhere('unit_price', 'LIKE', "%$keyword%")
+                        ->latest('products.created_at')->paginate($perPage);
+    } else {
+        $products = DB::table('products')
+                        ->join('categories', 'categories.id', '=', 'products.category_id')
+                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                        ->select(
+                            'products.id as product_id',
+                            'product_name',
+                            'description',
+                            'category_name',
+                            'company',
+                            'contact_name',
+                            'code',
+                            'variant',
+                            'image',
+                            'quantity',
+                            'unit_cost',
+                            'total_cost',
+                            'unit_price',
+                            'expiry',
+                        )
+                        ->latest('products.created_at')
+                        ->paginate($perPage);
+    }
+    return view('home', compact('products'));
 })->name('home');
 
 // Authentication routes

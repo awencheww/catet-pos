@@ -18,9 +18,9 @@
         <h2>Add Customer</h2>
         <div class="row g-3">
 
-          <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <strong>Note !</strong> After saving, the default password is `<strong>customer</strong>`. They can Reset Password later.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <div class="alert alert-dismissible fade show alert-info">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Note!</strong> After saving, the default password is `<strong>customer</strong>`. They can Reset Password later.nt.
           </div>
     
           <form action="{{route('customer.store')}}" method="POST" class="row g-3">

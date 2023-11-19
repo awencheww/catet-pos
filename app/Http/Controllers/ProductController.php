@@ -6,9 +6,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Buglinjo\LaravelWebp\Webp;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Buglinjo\LaravelWebp\Webp;
 
 class ProductController extends Controller
 {
@@ -20,7 +19,7 @@ class ProductController extends Controller
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
-            $products = DB::table('products')
+            $products = Product::query()
                             ->join('categories', 'categories.id', '=', 'products.category_id')
                             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                             ->select(
@@ -49,9 +48,9 @@ class ProductController extends Controller
                             ->orWhere('quantity', 'LIKE', "%$keyword%")
                             ->orWhere('total_cost', 'LIKE', "%$keyword%")
                             ->orWhere('unit_price', 'LIKE', "%$keyword%")
-                            ->latest('products.created_at')->paginate($perPage);
+                            ->latest('products.created_at')->fastPaginate($perPage);
         } else {
-            $products = DB::table('products')
+            $products = Product::query()
                             ->join('categories', 'categories.id', '=', 'products.category_id')
                             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                             ->select(
@@ -71,7 +70,7 @@ class ProductController extends Controller
                                 'expiry',
                             )
                             ->latest('products.created_at')
-                            ->paginate($perPage);
+                            ->fastPaginate($perPage);
         }
         return view('dashboard.products.index', compact('products'));
     }
@@ -196,12 +195,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        // $image = public_path('images/').$product->image;
-        // if(file_exists($image)) {
-        //     @unlink($image);
-        // }
         $product->delete();
-        // Product::destroy($product->id);
         return redirect()->back()->with('success', "Product successfully deleted. ");
     }
 }
