@@ -5,8 +5,8 @@
 
                 @if ($breadcrumb->url && !$loop->last)
                     <li class="breadcrumb-item">
-                      @if (str_contains($breadcrumb->title, 'Dashboard'))
-                        <svg class="bi"><use xlink:href="#house-fill"></use></svg>
+                      @if (str_contains($breadcrumb->title, 'Dashboard') || str_contains($breadcrumb->title, 'Home'))
+                        <i class="bi bi-house-fill"></i>
                       @endif
                       <a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a>
                     </li>

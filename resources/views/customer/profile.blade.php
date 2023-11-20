@@ -2,7 +2,7 @@
 @section('header')
     @include('dashboard.partials.svg')
     @include('customer.partials.header')
-    @endsection
+@endsection
 @section('content')
     @include('customer.partials.sidebar')
     

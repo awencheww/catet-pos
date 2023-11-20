@@ -89,7 +89,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Global "From" Address
+    | Global "From" Address TODO: Change from:address,name with corresponding credentials
     |--------------------------------------------------------------------------
     |
     | You may wish for all e-mails sent by your application to be sent from

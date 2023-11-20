@@ -127,3 +127,14 @@ Breadcrumbs::for('products.edit', function (BreadcrumbTrail $trail, Product $pro
     $trail->parent('products');
     $trail->push($product->product_name, route('products.edit', $product));
 });
+
+// Home > Storefront Products
+Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
+    $trail->push('Homes', route('home'));
+});
+
+// Home > Storefront Products
+Breadcrumbs::for('storefront.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('All Products', route('storefront.index'));
+});

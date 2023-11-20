@@ -1,9 +1,5 @@
 <?php
 
-use App\Models\User;
-use App\Models\Cashier;
-use App\Models\Customer;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -14,7 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,151 +22,19 @@ use Illuminate\Http\Request;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Homepage routes
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+// Guest add to tray
+Route::post('/addtray', [HomeController::class, 'addTray'])->name('add.tray');
 
-Route::get('/', function (Request $request) {
-    if(auth()) {
-        $id = auth()->id();
-        $customer = Customer::where('user_id', $id)->first();
-        $cashier = Cashier::where('user_id', $id)->first();
-        if($customer && blank($customer->name)) {
-            return redirect()->route('customer.profile');
-        }
-        if($cashier && blank($cashier->name)) {
-            return redirect()->route('cashier.profile');
-        }
-    }
-    $keyword = $request->get('search');
-    $perPage = 15;
-    if($keyword !== null) {
-        $products = DB::table('products')
-                        ->join('categories', 'categories.id', '=', 'products.category_id')
-                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                        ->select(
-                            'products.id as product_id',
-                            'product_name',
-                            'description',
-                            'category_name',
-                            'company',
-                            'contact_name',
-                            'code',
-                            'variant',
-                            'image',
-                            'quantity',
-                            'unit_cost',
-                            'total_cost',
-                            'unit_price',
-                            'expiry',
-                        )
-                        ->where('product_name', 'LIKE', "%$keyword%")
-                        ->orWhere('code', 'LIKE', "%$keyword%")
-                        ->orWhere('products.id', 'LIKE', "%$keyword%")
-                        ->orWhere('category_name', 'LIKE', "%$keyword%")
-                        ->orWhere('company', 'LIKE', "%$keyword%")
-                        ->orWhere('total_amount', 'LIKE', "%$keyword%")
-                        ->orWhere('unit_cost', 'LIKE', "%$keyword%")
-                        ->orWhere('quantity', 'LIKE', "%$keyword%")
-                        ->orWhere('total_cost', 'LIKE', "%$keyword%")
-                        ->orWhere('unit_price', 'LIKE', "%$keyword%")
-                        ->latest('products.created_at')->paginate($perPage);
-    } else {
-        $products = DB::table('products')
-                        ->join('categories', 'categories.id', '=', 'products.category_id')
-                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                        ->select(
-                            'products.id as product_id',
-                            'product_name',
-                            'description',
-                            'category_name',
-                            'company',
-                            'contact_name',
-                            'code',
-                            'variant',
-                            'image',
-                            'quantity',
-                            'unit_cost',
-                            'total_cost',
-                            'unit_price',
-                            'expiry',
-                        )
-                        ->latest('products.created_at')
-                        ->paginate($perPage);
-    }
-    return view('home', compact('products'));
-})->name('home');
-
-Route::get('/home', function (Request $request) {
-    if(auth()) {
-        $id = auth()->id();
-        $customer = Customer::where('user_id', $id)->first();
-        $cashier = Cashier::where('user_id', $id)->first();
-        if($customer && blank($customer->name)) {
-            return redirect()->route('customer.profile');
-        }
-        if($cashier && blank($cashier->name)) {
-            return redirect()->route('cashier.profile');
-        }
-    }
-    $keyword = $request->get('search');
-    $perPage = 15;
-    if($keyword !== null) {
-        $products = DB::table('products')
-                        ->join('categories', 'categories.id', '=', 'products.category_id')
-                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                        ->select(
-                            'products.id as product_id',
-                            'product_name',
-                            'description',
-                            'category_name',
-                            'company',
-                            'contact_name',
-                            'code',
-                            'variant',
-                            'image',
-                            'quantity',
-                            'unit_cost',
-                            'total_cost',
-                            'unit_price',
-                            'expiry',
-                        )
-                        ->where('product_name', 'LIKE', "%$keyword%")
-                        ->orWhere('code', 'LIKE', "%$keyword%")
-                        ->orWhere('products.id', 'LIKE', "%$keyword%")
-                        ->orWhere('category_name', 'LIKE', "%$keyword%")
-                        ->orWhere('company', 'LIKE', "%$keyword%")
-                        ->orWhere('total_amount', 'LIKE', "%$keyword%")
-                        ->orWhere('unit_cost', 'LIKE', "%$keyword%")
-                        ->orWhere('quantity', 'LIKE', "%$keyword%")
-                        ->orWhere('total_cost', 'LIKE', "%$keyword%")
-                        ->orWhere('unit_price', 'LIKE', "%$keyword%")
-                        ->latest('products.created_at')->paginate($perPage);
-    } else {
-        $products = DB::table('products')
-                        ->join('categories', 'categories.id', '=', 'products.category_id')
-                        ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                        ->select(
-                            'products.id as product_id',
-                            'product_name',
-                            'description',
-                            'category_name',
-                            'company',
-                            'contact_name',
-                            'code',
-                            'variant',
-                            'image',
-                            'quantity',
-                            'unit_cost',
-                            'total_cost',
-                            'unit_price',
-                            'expiry',
-                        )
-                        ->latest('products.created_at')
-                        ->paginate($perPage);
-    }
-    return view('home', compact('products'));
-})->name('home');
+// Storefront
+Route::get('/storefront/home', [HomeController::class, 'viewProducts'])->name('storefront.index');
 
 // Authentication routes
 Route::middleware('guest')->group(function () {
+
+    // Login and Register routes
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticate'])->name('auth.login');
     Route::get('/register', [AuthController::class, 'register'])->name('register');
@@ -237,4 +101,7 @@ Route::middleware('admin')->group(function () {
 
     // Product
     Route::resource('products', ProductController::class);
+
+    //Storefront
+    Route::post('/storefront/home', [ProductController::class, 'addTray'])->name('add.to.tray');
 });
