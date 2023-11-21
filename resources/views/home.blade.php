@@ -19,7 +19,13 @@
           .carousel-caption {
             background-image: linear-gradient(60deg, rgba(86, 114, 185, 0.5), rgba(232, 50, 131, 0.5)) !important;
             left: 0px;
-            bottom: 210px;
+            bottom: 230px;
+          }
+          #offcanvasTray {
+            width: 650px;
+          }
+          .offcanvas-body {
+            padding-top: 0px;
           }
         </style>
     </head>
@@ -33,6 +39,10 @@
 
         <!-- Header -->
         @include('storefront.partials.header')
+
+        <!-- Tray -->
+        @include('storefront.partials.tray')
+
 
         <!-- Section Products-->
         <section>
@@ -77,7 +87,8 @@
                             <div class="card-footer pt-0 border-top-0 bg-transparent text-center">
                               <form action="{{ route('add.tray') }}" method="post">
                                 @csrf
-                                <button type="submit" class="btn btn-outline-secondary mt-auto">Add to tray</button>
+                                <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+                                <button type="submit" class="btn btn-success mt-auto">Add to tray</button>
                               </form>
                             </div>
                         </div>
@@ -99,7 +110,7 @@
               toast: true,
               position: 'top-end',
               showConfirmButton: false,
-              timer: 3000,
+              timer: 2000,
               timerProgressBar: true,
               didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)

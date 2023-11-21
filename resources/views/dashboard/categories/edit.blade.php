@@ -45,9 +45,9 @@
       <script>
         document.addEventListener('readystatechange', function() {
           //focus #name element
-          var n = document.getElementById('name');
-          n.focus();
-          n.select();
+          var el = document.getElementById('category_name');
+              el.focus();
+              el.select();
           
           const Toast = Swal.mixin({
             toast: true,

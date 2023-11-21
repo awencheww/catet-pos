@@ -43,7 +43,6 @@ class ProductController extends Controller
                             ->orWhere('products.id', 'LIKE', "%$keyword%")
                             ->orWhere('category_name', 'LIKE', "%$keyword%")
                             ->orWhere('company', 'LIKE', "%$keyword%")
-                            ->orWhere('total_amount', 'LIKE', "%$keyword%")
                             ->orWhere('unit_cost', 'LIKE', "%$keyword%")
                             ->orWhere('quantity', 'LIKE', "%$keyword%")
                             ->orWhere('total_cost', 'LIKE', "%$keyword%")

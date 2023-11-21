@@ -21,6 +21,15 @@
             left: 0px;
             bottom: 210px;
           }
+          #filter {
+            top: 5.5em;
+          }
+          #offcanvasTray {
+            width: 650px;
+          }
+          .offcanvas-body {
+            padding-top: 0px;
+          }
         </style>
     </head>
     <body>
@@ -43,6 +52,8 @@
       @include('storefront.partials.footer')
 
         <x-body-js-link></x-body-js-link>
+        {{-- custom scripts --}}
+        @stack('home-scripts')
         {{-- sweetalert toast --}}
           <script type="text/javascript">
 
@@ -50,7 +61,7 @@
               toast: true,
               position: 'top-end',
               showConfirmButton: false,
-              timer: 3000,
+              timer: 2000,
               timerProgressBar: true,
               didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)

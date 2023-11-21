@@ -86,7 +86,7 @@ class AuthController extends Controller
     // register account serve as backend for register view or customer registration form
     public function customerRegister(Request $request): RedirectResponse
     {
-        $request->validate([
+        $credentials = $request->validate([
             'name' => 'required|string|min:6',
             'username' => 'required|string|min:3|max:20|unique:users,username',
             'email' => 'required|unique:users,email',
@@ -102,7 +102,12 @@ class AuthController extends Controller
             'name' => $request->name,
             // 'created_at' => now('Asia/Manila'),
         ]);
-
+        //attempt to login after successfully created account
+        Auth::attempt([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
         return redirect()->back()->with('success', 'You are Successfully registered! Enjoy your Shopping.');
     }
 

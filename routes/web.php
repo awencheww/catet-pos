@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TrayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::post('/addtray', [HomeController::class, 'addTray'])->name('add.tray');
 
 // Storefront
-Route::get('/storefront/home', [HomeController::class, 'viewProducts'])->name('storefront.index');
+Route::get('/storefront/products', [HomeController::class, 'viewProducts'])->name('storefront.index');
 
 // Authentication routes
 Route::middleware('guest')->group(function () {
@@ -58,6 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::get('/customer/reset-password', [CustomerController::class, 'resetPassword'])->name('customer.reset.password');
     Route::post('/customer/update', [CustomerController::class, 'updateCustomer'])->name('customer.update');
+
+    // Tray
+    Route::post('/checkout', [TrayController::class, 'store'])->name('tray.checkout');
 });
 
 Route::middleware('admin')->group(function () {
@@ -101,7 +105,4 @@ Route::middleware('admin')->group(function () {
 
     // Product
     Route::resource('products', ProductController::class);
-
-    //Storefront
-    Route::post('/storefront/home', [ProductController::class, 'addTray'])->name('add.to.tray');
 });

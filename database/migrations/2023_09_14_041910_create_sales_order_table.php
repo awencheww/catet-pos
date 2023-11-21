@@ -12,7 +12,6 @@ return new class () extends Migration {
     {
         Schema::create('sales_order', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('quantity')->default(0);
@@ -22,6 +21,8 @@ return new class () extends Migration {
             $table->decimal('net_total')->default(0.00);
             $table->integer('sugar_content')->nullable();
             $table->string('custom_name');
+            $table->string('so_status')->default('delivered');
+            $table->string('so_note')->nullable();
             $table->date('sales_date')->default(now('Asia/Manila'));
         });
     }

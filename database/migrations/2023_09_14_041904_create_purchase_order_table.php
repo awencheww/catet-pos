@@ -17,6 +17,8 @@ return new class () extends Migration {
             $table->integer('quantity')->default(0);
             $table->decimal('unit_cost')->default(0.00);
             $table->decimal('unit_price')->default(0.00);
+            $table->string('po_status')->default('received');
+            $table->string('po_note')->nullable();
             $table->date('purchase_date')->default(now('Asia/Manila'));
         });
     }

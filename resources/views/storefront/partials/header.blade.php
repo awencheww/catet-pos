@@ -39,7 +39,7 @@
 
       <div class="carousel-caption d-none d-md-block d-lg-block w-100">
         <h1 class="text-white">Welcome to Catet's Sweets & Cakes!</h1>
-        <h3 class="text-white text-muted">Some of Our Featured Cakes and Desert</h3>
+        {{-- <h3 class="text-white">Some of Our Featured Cakes and Desert</h3> --}}
         <p class="text-white">Start shopping now to have an exclusive deals and become our members soon.</p>
         <a href="{{ route('storefront.index') }}" class="btn btn-primary btn-lg">View Products</a>
       </div>
