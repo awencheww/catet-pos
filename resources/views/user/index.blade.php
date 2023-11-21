@@ -48,26 +48,28 @@
           </thead>
           <tbody>
             @forelse ($users as $user)
-              <tr>
-                <th scope="row">{{$user->user_id}}</th>
-                <td>{{$user->name}}</td>
-                <td>{{$user->address}}</td>
-                <td>{{$user->phone_number}}</td>
-                <td>{{$user->username}}</td>
-                <td>{{$user->email}}</td>
-                <td>{{$user->role}}</td>
-                <td class="d-flex justify-content-center p-sm-1">
-                  <a href="{{route('/user/edit', $user->user_id)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
-                      <i class="bi bi-pencil-square"></i> 
-                  </a>
-                  <form action="{{route('/user/destroy', $user->user_id)}}" method="POST" class="deleteUser">
-                    @csrf
-                    <button type="submit" class="btnDelete btn btn-danger btn-sm">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
-                </td>
-              </tr>
+              @if ($user->user_id != Auth::user()->id)
+                <tr>
+                  <th scope="row">{{$user->user_id}}</th>
+                  <td>{{$user->name}}</td>
+                  <td>{{$user->address}}</td>
+                  <td>{{$user->phone_number}}</td>
+                  <td>{{$user->username}}</td>
+                  <td>{{$user->email}}</td>
+                  <td>{{$user->role}}</td>
+                  <td class="d-flex justify-content-center p-sm-1">
+                    <a href="{{route('/user/edit', $user->user_id)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
+                        <i class="bi bi-pencil-square"></i> 
+                    </a>
+                    <form action="{{route('/user/destroy', $user->user_id)}}" method="POST" class="deleteUser">
+                      @csrf
+                      <button type="submit" class="btnDelete btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              @endif
             @empty
               <tr>
                 <td colspan="8" class="text-center">No record found</td>

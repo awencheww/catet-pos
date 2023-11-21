@@ -14,7 +14,7 @@ class CashierController extends Controller
         $keyword = $request->get('search');
         $perPage = 5;
         if(!empty($keyword)) {
-            $cashier = Cashier::where('name', 'LIKE', "%$keyword%")
+            $cashier = Cashier::orWhere('name', 'LIKE', "%$keyword%")
                                 ->orWhere('address', 'LIKE', "%$keyword%")
                                 ->orWhere('phone_number', 'LIKE', "%$keyword%")
                                 ->latest()->fastPaginate($perPage);
