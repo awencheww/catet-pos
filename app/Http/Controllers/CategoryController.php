@@ -88,7 +88,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        abort_unless(Auth::user()->role === 'admin', 403);
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         Category::destroy($category->id);
         return redirect()->back()->with('success', "Category successfully deleted.");
     }

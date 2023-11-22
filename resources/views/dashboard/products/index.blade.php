@@ -138,6 +138,21 @@
               title: "{{Session::get('success')}}",
             })
           @endif
+
+          @if ($message = Session::get('error'))
+            Toast.fire({
+              icon: "error",
+              title: "{{ $message }}",
+            })
+          @endif
+
+          @if ($message = Session::get('warning'))
+            Toast.fire({
+              icon: "warning",
+              title: "{{ $message }}",
+            })
+          @endif
+
         });
       </script>
     @endpush

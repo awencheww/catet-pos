@@ -6,8 +6,9 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Buglinjo\LaravelWebp\Webp;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -194,6 +195,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         $product->delete();
         return redirect()->back()->with('success', "Product successfully deleted. ");
     }

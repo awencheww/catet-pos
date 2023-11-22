@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
@@ -109,6 +110,9 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         Supplier::destroy($supplier->id);
         return redirect()->back()->with('success', "Supplier successfully deleted.");
     }

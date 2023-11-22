@@ -58,6 +58,7 @@
               </div>
           
               <button type="submit" class="btn btn-primary"><i class="bi bi-filter"></i> Submit</button>
+
           </form>
         </div>
       </div>
@@ -80,6 +81,9 @@
                       <div class="text-center">
                           <!-- Product name-->
                           <h4 class="card-title">{{ $product->product_name }}</h4>
+                          @if ($product->variant != null)
+                            <p>( {{ $product->variant }} )</p>
+                          @endif
                           <h6 class="card-subtitle text-muted">{{ $product->description }}</h6>
                           <!-- Product reviews-->
                           <div class="d-flex justify-content-center small text-warning mb-2">
@@ -114,7 +118,7 @@
           @empty
             <div class="col text-center">
               <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
-                <p>Prodct not found.</p>
+                <p>Product not found.</p>
               </div>
             </div>
           @endforelse
@@ -128,4 +132,66 @@
     {{ $products->links() }}
   </main>
 
+  @push('home-scripts')
+      <script>
+        document.addEventListener('readystatechange', function() {
+          var form = document.querySelectorAll(".delete");
+          form.forEach(element => {
+            element.addEventListener('submit', function(e) {
+              e.preventDefault();
+              if(e.currentTarget) {
+                var form = e.currentTarget;
+                Swal.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, delete it!',
+                }).then(function (result) {
+                  if (result.isConfirmed) {
+                    form.submit();
+                  }
+                })
+              }
+            })
+          });
+
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: function (toast) {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            },
+          })
+          
+          @if ($message = Session::get('success'))
+            Toast.fire({
+              icon: "success",
+              title: "{{ $message }}",
+            })
+          @endif
+          
+          @if ($message = Session::get('error'))
+            Toast.fire({
+              icon: "error",
+              title: "{{ $message }}",
+            })
+          @endif
+
+          @if ($message = Session::get('warning'))
+            Toast.fire({
+              icon: "warning",
+              title: "{{ $message }}",
+            })
+          @endif
+
+        });
+      </script>
+    @endpush
 @endsection

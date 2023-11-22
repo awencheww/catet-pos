@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -85,6 +86,9 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         $fields = $payment->getFillable();
         //TODO: MAKE PO AND SO FOR RELATIONSHIP TO DISPLAY IN VIEW TO EDIT
         // $po = Category::query()->get();
@@ -123,6 +127,9 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
+        if(Auth::user()->role !== 'admin') {
+            return redirect()->back()->with('error', 'Delete Permission denied!');
+        }
         Payment::destroy($payment->id);
         return redirect()->back()->with('success', "Payment successfully deleted.");
     }
