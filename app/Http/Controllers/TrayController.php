@@ -12,7 +12,32 @@ class TrayController extends Controller
      */
     public function index()
     {
-        //
+        $perPage = 30;
+        if(auth()->user()) {
+            $id = auth()->user()->id;
+            //add tray
+            $tray_count = Tray::query()->where('user_id', '=', $id)->get()->count();
+            $tray = Tray::query()
+                    ->rightJoin('products', 'products.id', '=', 'customer_tray.product_id')
+                    ->select(
+                        'products.id as product_id',
+                        'customer_tray.id as tray_id',
+                        'product_name',
+                        'description',
+                        'code',
+                        'variant',
+                        'image',
+                        'quantity',
+                        'unit_cost',
+                        'total_cost',
+                        'unit_price',
+                        'expiry',
+                    )
+                    ->where('user_id', '=', $id)
+                    ->latest('customer_tray.created_at')
+                    ->fastPaginate($perPage);
+        }
+        return view('customer.customer-tray', compact('tray_count', 'tray'));
     }
 
     /**
@@ -58,8 +83,9 @@ class TrayController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tray $tray)
+    public function destroy($id)
     {
-        //
+        Tray::destroy($id);
+        return redirect()->back()->with('success', "Product remove from tray. ");
     }
 }

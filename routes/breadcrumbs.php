@@ -37,6 +37,11 @@ Breadcrumbs::for('/customer/edit', function (BreadcrumbTrail $trail, $id) {
 Breadcrumbs::for('customer.profile', function (BreadcrumbTrail $trail) {
     $trail->push('Customer Profile', route('customer.profile'));
 });
+// Customer Tray
+Breadcrumbs::for('customer.tray', function (BreadcrumbTrail $trail) {
+    $trail->parent('customer.profile');
+    $trail->push('Customer Tray', route('customer.tray'));
+});
 
 
 // Home > Users

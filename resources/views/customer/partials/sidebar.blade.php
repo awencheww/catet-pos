@@ -19,17 +19,17 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link>
+          <x-nav-link :href="route('customer.tray')" :active="request()->routeIs('customer.tray')">
             <svg class="bi"><use xlink:href="#cart"/></svg>
             Your Tray
           </x-nav-link>
         </li>
-        <li class="nav-item">
+        {{-- <li class="nav-item">
           <x-nav-link>
             <svg class="bi"><use xlink:href="#puzzle"/></svg>
             Integrations
           </x-nav-link>
-        </li>
+        </li> --}}
       </ul>
 
       <ul class="nav flex-column mb-auto">

@@ -1,13 +1,29 @@
+<form action="{{ route('tray.checkout') }}" method="post">
+  @csrf
+
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasTray" aria-labelledby="offcanvasExampleLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasTrayLabel">Your Tray</h5>
+    
+    @guest
+        <h5 class="offcanvas-title">Your Tray</h5>
+    @endguest
+    @auth
+    <a href="{{ route('customer.tray') }}" class="btn btn-primary" id="offcanvasTrayLabel">
+      <i class="bi bi-eye"></i>
+      View Your Tray
+    </a>
+
+    <h4 id="subtotal-header" style="margin-left: 2em;">Subtotal: <strong style="font-size: 1.3em; color: black;" name="subtotal" id="subtotal"></strong></h4>
+
+    {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
+    <button type="submit" class="btn btn-success" style="margin-left: 2em;">Checkout</button>
+    @endauth
+
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
 
     @isset($tray)
-      <form action="{{ route('tray.checkout') }}" method="post">
-        @csrf
 
         <div class="table-responsive small caption-top">
           <caption>List of Products</caption>
@@ -28,6 +44,7 @@
                       <input type="hidden" name="product_id" value="{{ $item->product_id }}">
                       <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="100" height="100">
                       {{ $item->product_name }}
+                      {{ $item->variant }}
                     </td>
                     <td class="price">
                       <input type="hidden" name="price" value="{{ $item->unit_price }}">
@@ -40,10 +57,14 @@
                       <input type="hidden" name="total" value="{{ $item->unit_price * 1 }}">
                       {{ $item->unit_price * 1 }}.00
                     </td>
+                  </form><!-- form checkout -->
                     <td>
-                      <a href="#" class="text-danger">
-                        <i class="bi bi-x-lg"></i>
-                      </a>
+                      <form action="{{ route('tray.destroy', $item->tray_id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="nav-link text-danger">
+                          <i class="bi bi-x-lg"></i>
+                        </button>
+                      </form>
                     </td>
                   </tr>
               @empty
@@ -51,51 +72,63 @@
                     <td class="text-center" colspan="20">No items to display. <a href="{{ route('storefront.index') }}">Continue Shopping</a></td>
                   </tr>
               @endforelse
-                <tr class="align-middle">
-                  <td style="text-align: right;" colspan="3"><h5 style="margin: 0px;">Subtotal</h5></td>
-                  <td colspan="2" style="font-size: 2em;"><strong name="subtotal" id="subtotal"></strong></td>
-                </tr>
             </tbody>
           </table>
           <div class="d-flex justify-content-end px-3">
-            {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
-            <button type="submit" id="checkout" class="btn btn-primary btn-lg">Checkout</button>
+            
           </div>
         </div>
 
-      </form>
-    @endisset
-    
+      @endisset
+      
+    </div>
   </div>
-</div>
 
 <script>
-  var price = document.querySelectorAll('.price')
-  var total = document.querySelectorAll('.total')
-  var subtotal = document.getElementById('subtotal')
-  var qty = document.querySelectorAll('.quantity')
-  qty.forEach(function(el, key) {
-    el.addEventListener('change', (e) => {
-      let sum = 0;
-      let val = e.target.value;
-      total[key].textContent = val * price[key].textContent+'.00';
-      
-      total.forEach(function(e, key) {
-        sum += parseInt(e.textContent, 10);
-      })
-      subtotal.innerText = sum+'.00';
-    })
-  })
-  //show subtotal when its loaded
-  total.forEach(function(e, key) {
-    subtotal.innerText += parseInt(e.textContent, 10)+'.00';
-  })
+  function currencyFormat(amount) {
+    // Parse the text content as a float
+    // var amount = parseFloat(myElement.innerText);
+    // Format the amount as currency
+    var formattedAmount = new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP' // You can change this to your desired currency code
+    }).format(amount);
+    return formattedAmount;
+  }
 
-  @isset($tray)
-    var btn = document.getElementById('checkout')
-    btn.addEventListener('submit', function() {
+  function updateSubtotal() {
+    var price = document.querySelectorAll('.price');
+    var total = document.querySelectorAll('.total');
+    var subtotal = document.getElementById('subtotal');
+    var qty = document.querySelectorAll('.quantity');
 
-    })
-  @endisset
+    let sum = 0;
+
+    qty.forEach(function (el, key) {
+        let val = el.value;
+        total[key].textContent = (val * price[key].textContent).toFixed(2);
+    });
+
+    total.forEach(function (e) {
+        sum += parseFloat(e.textContent);
+    });
+
+    return subtotal.textContent = currencyFormat(sum.toFixed(2));
+  }
+
+  // Add event listeners for quantity changes
+  var qty = document.querySelectorAll('.quantity');
+  qty.forEach(function (el) {
+    el.addEventListener('change', updateSubtotal);
+  });
+  // Call updateSubtotal on initial page load
+  updateSubtotal();
+
+  // @isset($tray)
+  //   var btn = document.getElementById('checkout')
+  //   btn.addEventListener('submit', function() {
+
+  //   })
+  // @endisset
 
 </script>

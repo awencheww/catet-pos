@@ -112,7 +112,7 @@
               </div>
             </div>
           @empty
-            <div class="col">
+            <div class="col text-center">
               <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
                 <p>Prodct not found.</p>
               </div>

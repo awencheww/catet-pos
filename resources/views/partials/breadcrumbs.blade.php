@@ -8,6 +8,9 @@
                       @if (str_contains($breadcrumb->title, 'Dashboard') || str_contains($breadcrumb->title, 'Home'))
                         <i class="bi bi-house-fill"></i>
                       @endif
+                      @if (str_contains($breadcrumb->title, 'Customer Profile'))
+                        <i class="bi bi-person-circle"></i>
+                      @endif
                       <a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a>
                     </li>
                 @else

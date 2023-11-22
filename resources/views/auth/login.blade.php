@@ -30,15 +30,7 @@
         <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   @endif
-  @if (Session::has('status'))
-    <script type="text/javascript">
-      Swal.fire({
-        icon: 'success',
-        title: 'Reset Password',
-        text: "{{session()->get('status')}}",
-      })
-    </script>
-  @endif
+
     <form method="POST" action="{{route('auth.login')}}">
       @csrf
       {{-- component form-logo --}}
@@ -72,4 +64,16 @@
     <p>Don't have an account yet? <a href="{{route('register')}}" class="text-decoration-none text-info">Register now</a> </p>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
   </main>
+
+  @push('auth-scripts')
+    @if (Session::has('status'))
+      <script type="text/javascript">
+        Swal.fire({
+          icon: 'success',
+          title: 'Reset Password',
+          text: "{{session()->get('status')}}",
+        })
+      </script>
+    @endif
+  @endpush
 @endsection

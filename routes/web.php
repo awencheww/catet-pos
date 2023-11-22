@@ -61,7 +61,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/customer/update', [CustomerController::class, 'updateCustomer'])->name('customer.update');
 
     // Tray
+    Route::get('/customer/tray', [TrayController::class, 'index'])->name('customer.tray');
     Route::post('/checkout', [TrayController::class, 'store'])->name('tray.checkout');
+    Route::post('/tray/remove-product/{id}', [TrayController::class, 'destroy'])->name('tray.destroy');
 });
 
 Route::middleware('admin')->group(function () {

@@ -62,6 +62,9 @@
                                 <div class="text-center">
                                     <!-- Product name-->
                                     <h4 class="card-title">{{ $product->product_name }}</h4>
+                                    @if ($product->variant != null)
+                                      <p>( {{ $product->variant }} )</p>
+                                    @endif
                                     <h6 class="card-subtitle text-muted">{{ $product->description }}</h6>
                                     <!-- Product reviews-->
                                     <div class="d-flex justify-content-center small text-warning mb-2">
@@ -105,7 +108,7 @@
         <x-body-js-link></x-body-js-link>
         {{-- sweetalert toast --}}
           <script type="text/javascript">
-
+          
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',

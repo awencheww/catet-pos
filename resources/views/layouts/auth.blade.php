@@ -27,5 +27,6 @@
 
     <x-body-js-link></x-body-js-link>
 
+    @stack('auth-scripts')
     </body>
 </html>

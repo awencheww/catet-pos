@@ -15,7 +15,7 @@ class UserController extends Controller
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
-            $users = User::query()->distinct()
+            $users = User::query()
                         ->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')
                             ->where('cashiers.name', 'LIKE', "%$keyword%")
                             ->orWhere('cashiers.address', 'LIKE', "%$keyword%")
@@ -23,7 +23,7 @@ class UserController extends Controller
                             ->orWhere('users.email', 'LIKE', "%$keyword%")
                             ->latest('users.created_at')->fastPaginate($perPage);
         } else {
-            $users = User::query()->distinct()
+            $users = User::query()
                             ->rightJoin('cashiers', 'cashiers.user_id', '=', 'users.id')
                             ->latest('users.created_at')
                             ->fastPaginate($perPage);

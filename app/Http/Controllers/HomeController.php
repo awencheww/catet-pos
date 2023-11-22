@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
+    //Home page view
     public function index(Request $request)
     {
         if(auth()->user()) {
@@ -29,6 +30,20 @@ class HomeController extends Controller
             $tray_count = Tray::query()->where('user_id', '=', $id)->get()->count();
             $tray = Tray::query()
                     ->rightJoin('products', 'products.id', '=', 'customer_tray.product_id')
+                    ->select(
+                        'products.id as product_id',
+                        'customer_tray.id as tray_id',
+                        'product_name',
+                        'description',
+                        'code',
+                        'variant',
+                        'image',
+                        'quantity',
+                        'unit_cost',
+                        'total_cost',
+                        'unit_price',
+                        'expiry',
+                    )
                     ->where('user_id', '=', $id)->get();
         }
         $keyword = $request->get('search');
@@ -93,6 +108,7 @@ class HomeController extends Controller
         return view('home', compact('products'));
     }
 
+    //Storefront view
     public function viewProducts(Request $request)
     {
         if(auth()->user()) {
@@ -109,6 +125,20 @@ class HomeController extends Controller
             $tray_count = Tray::query()->where('user_id', '=', $id)->get()->count();
             $tray = Tray::query()
                     ->rightJoin('products', 'products.id', '=', 'customer_tray.product_id')
+                    ->select(
+                        'products.id as product_id',
+                        'customer_tray.id as tray_id',
+                        'product_name',
+                        'description',
+                        'code',
+                        'variant',
+                        'image',
+                        'quantity',
+                        'unit_cost',
+                        'total_cost',
+                        'unit_price',
+                        'expiry',
+                    )
                     ->where('user_id', '=', $id)->get();
         }
         $categories = Category::query()->get();
