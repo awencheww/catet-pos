@@ -51,7 +51,7 @@
                 </li>
               @else
                 <li class="nav-item" style="margin-right: 3px; margin-bottom: 3px;">
-                  <a href="{{route('customer.profile')}}" class="btn btn-secondary btn-sm">
+                  <a href="{{route('customer.profile')}}" class="btn btn-primary btn-sm">
                     <i class="bi bi-person-circle">
                     </i>
                     {{Auth::user()->username}}
@@ -61,7 +61,7 @@
             @endauth
             
             <li class="nav-item" style="margin-left: 3px; margin-right: 3px; margin-bottom: 3px;">
-              {{ '|' }}
+              <span class="text-white">{{ '|' }}</span>
               <a class="btn btn-outline-primary btn-sm" data-bs-toggle="offcanvas" href="#offcanvasTray" role="button" aria-controls="offcanvasTray">
                 Your Tray
                 <i class="bi-cart4">

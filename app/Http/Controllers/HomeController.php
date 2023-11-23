@@ -9,7 +9,6 @@ use App\Models\Customer;
 use App\Models\Supplier;
 use App\Models\Tray;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -49,6 +48,7 @@ class HomeController extends Controller
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
+            //TODO: TRY https://laravel.com/docs/10.x/collections#method-filter for filtering
             $products = Product::query()
                             ->join('categories', 'categories.id', '=', 'products.category_id')
                             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
@@ -78,6 +78,7 @@ class HomeController extends Controller
                             ->orWhere('quantity', 'LIKE', "%$keyword%")
                             ->orWhere('total_cost', 'LIKE', "%$keyword%")
                             ->orWhere('unit_price', 'LIKE', "%$keyword%")
+                            ->orWhere('category_name', 'LIKE', "%$request->category_name%")
                             ->latest('products.created_at')->fastPaginate($perPage);
         } else {
             $products = Product::query()

@@ -17,9 +17,9 @@
             max-height: 40em;
           }
           .carousel-caption {
-            background-image: linear-gradient(60deg, rgba(86, 114, 185, 0.5), rgba(232, 50, 131, 0.5)) !important;
+            background-image: linear-gradient(60deg, rgba(86, 114, 185, 0.), rgba(232, 50, 131, 0.3)) !important;
             left: 0px;
-            bottom: 210px;
+            bottom: 230px;
           }
           #filter {
             top: 5.5em;
@@ -38,13 +38,34 @@
       </x-toggle-theme>
       <!-- Navigation -->
       @include('storefront.partials.nav')
-      
+
+      <!-- Tray -->
+      @include('storefront.partials.tray')
+
       <div class="container-fluid">
         <div class="row">
-      
+
+          <main class="px-md-4 p-3 mb-5">
+            @if (request()->routeIs('storefront.index'))
+              {{-- Breadcrumbs --}}
+              <div class="row p-2">
+                {{ Breadcrumbs::render('storefront.index') }}
+              </div>
+              
+            @endif
+
+            @includeWhen(request()->routeIs('storefront.index'), 'storefront.partials.filter')
+
             <!-- Section Products-->
             @yield('storefront-main')
       
+            @if (request()->routeIs('storefront.index'))
+              {{-- //TODO: TRY TO MAKE IT VISIBLE BY ADDING MORE PROUDCTS, AND LIMIT THE DISPLAY BY 50 --}}
+              {{-- PAGINATION --}}
+              {{ $products->links() }}
+            @endif
+          </main>
+
         </div>
       </div>
       
@@ -54,6 +75,7 @@
         <x-body-js-link></x-body-js-link>
         {{-- custom scripts --}}
         @stack('home-scripts')
+
         {{-- sweetalert toast --}}
           <script type="text/javascript">
 

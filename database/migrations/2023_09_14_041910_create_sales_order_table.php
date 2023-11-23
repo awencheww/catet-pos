@@ -12,6 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('sales_order', function (Blueprint $table) {
             $table->id();
+            $table->integer('invoice_number')->unique()->unsigned()->autoIncrement();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('quantity')->default(0);

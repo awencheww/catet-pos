@@ -1,11 +1,10 @@
-@extends('layouts.home')
-@section('storefront-main')
+<!-- Section Products-->
+<section>
+  <div class="container mt-4">
+      <div class="row gx-3 gx-md-3 mx-2 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 justify-content-center">
 
-    <div class="container mt-2">
-
-        <div class="row gx-3 gx-md-3 mx-2 gx-lg-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 justify-content-center">
-
-          @forelse ($products as $product)
+          @foreach ($products as $product)
+            
             <div class="col">
               <div class="card mb-3">
                   <!-- Sale badge-->
@@ -51,78 +50,9 @@
                   </div>
               </div>
             </div>
-          @empty
-            <div class="col text-center">
-              <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
-                <p>Product not found.</p>
-              </div>
-            </div>
-          @endforelse
-              
-            
-        </div>
-    </div>
 
-  @push('home-scripts')
-      <script>
-        document.addEventListener('readystatechange', function() {
-          var form = document.querySelectorAll(".delete");
-          form.forEach(element => {
-            element.addEventListener('submit', function(e) {
-              e.preventDefault();
-              if(e.currentTarget) {
-                var form = e.currentTarget;
-                Swal.fire({
-                  title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!',
-                }).then(function (result) {
-                  if (result.isConfirmed) {
-                    form.submit();
-                  }
-                })
-              }
-            })
-          });
-
-          const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true,
-            didOpen: function (toast) {
-              toast.addEventListener('mouseenter', Swal.stopTimer)
-              toast.addEventListener('mouseleave', Swal.resumeTimer)
-            },
-          })
+          @endforeach
           
-          @if ($message = Session::get('success'))
-            Toast.fire({
-              icon: "success",
-              title: "{{ $message }}",
-            })
-          @endif
-          
-          @if ($message = Session::get('error'))
-            Toast.fire({
-              icon: "error",
-              title: "{{ $message }}",
-            })
-          @endif
-
-          @if ($message = Session::get('warning'))
-            Toast.fire({
-              icon: "warning",
-              title: "{{ $message }}",
-            })
-          @endif
-
-        });
-      </script>
-    @endpush
-@endsection
+      </div>
+  </div>
+</section>
