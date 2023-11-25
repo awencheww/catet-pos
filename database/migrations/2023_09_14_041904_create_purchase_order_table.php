@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('purchase_order', function (Blueprint $table) {
             $table->id();
-            $table->integer('po_number')->unique()->unsigned()->autoIncrement();
+            $table->string('po_number')->unique();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->integer('quantity')->default(0);

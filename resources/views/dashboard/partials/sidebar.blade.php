@@ -43,7 +43,7 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link>
+          <x-nav-link :href="route('admin.orders')" :active="request()->routeIs('admin.orders')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Orders
           </x-nav-link>

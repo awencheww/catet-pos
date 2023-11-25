@@ -7,21 +7,27 @@
     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <x-nav-link :href="route('customer.profile', Auth::user()->id)" :active="request()->routeIs('customer.profile')">
+          <x-nav-link :href="route('customer.profile')" :active="request()->routeIs('customer.profile')">
             <i class="bi bi-person-circle"></i>
             Profile
-          </x-nav-link>
-        </li>
-        <li class="nav-item">
-          <x-nav-link>
-            <svg class="bi"><use xlink:href="#file-earmark"/></svg>
-            Orders
           </x-nav-link>
         </li>
         <li class="nav-item">
           <x-nav-link :href="route('customer.tray')" :active="request()->routeIs('customer.tray')">
             <svg class="bi"><use xlink:href="#cart"/></svg>
             Your Tray
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
+          <x-nav-link :href="route('customer.order')" :active="request()->routeIs('customer.order')">
+            <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+            Orders
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
+          <x-nav-link :href="route('order.history')" :active="request()->routeIs('order.history')">
+            <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+            Order History
           </x-nav-link>
         </li>
         {{-- <li class="nav-item">

@@ -14,10 +14,13 @@ class Payment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'purchase_order_id',
+        'sales_invoice_number',
         'sales_order_id',
-        'method',
+        'purchase_order_id',
+        'payment_method',
         'status',
+        'sales_total_amount',
+        'paid_amount',
         'note',
     ];
 }

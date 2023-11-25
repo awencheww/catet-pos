@@ -42,6 +42,16 @@ Breadcrumbs::for('customer.tray', function (BreadcrumbTrail $trail) {
     $trail->parent('customer.profile');
     $trail->push('Customer Tray', route('customer.tray'));
 });
+// Customer Orders
+Breadcrumbs::for('customer.order', function (BreadcrumbTrail $trail) {
+    $trail->parent('customer.profile');
+    $trail->push('Your Orders', route('customer.order'));
+});
+// Customer Order History
+Breadcrumbs::for('order.history', function (BreadcrumbTrail $trail) {
+    $trail->parent('customer.profile');
+    $trail->push('Your Order History', route('order.history'));
+});
 
 
 // Home > Users
@@ -142,4 +152,11 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('storefront.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('All Products', route('storefront.index'));
+});
+
+
+// Dashboard > Customer Orders
+Breadcrumbs::for('admin.orders', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Customer Orders', route('admin.orders'));
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminSalesOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -11,7 +12,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SalesOrderController;
 use App\Http\Controllers\TrayController;
+use App\Models\SalesOrder;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,8 +65,17 @@ Route::middleware('auth')->group(function () {
 
     // Tray
     Route::get('/customer/tray', [TrayController::class, 'index'])->name('customer.tray');
-    Route::post('/checkout', [TrayController::class, 'store'])->name('tray.checkout');
+    //Tray checkout with Create Sales Order
+    Route::post('/checkout', [SalesOrderController::class, 'create'])->name('tray.checkout');
     Route::post('/tray/remove-product/{id}', [TrayController::class, 'destroy'])->name('tray.destroy');
+
+    // Customer Orders
+    Route::get('/customer/order', [SalesOrderController::class, 'index'])->name('customer.order');
+    Route::get('/customer/order-history', [SalesOrderController::class, 'orderHistory'])->name('order.history');
+    Route::post('/customer/order-checkout', [SalesOrderController::class, 'store'])->name('order.checkout');
+
+    //Delete order
+    Route::post('/customer/delete/{id}', [SalesOrderController::class, 'destroy'])->name('order.destroy');
 });
 
 Route::middleware('admin')->group(function () {
@@ -107,4 +119,8 @@ Route::middleware('admin')->group(function () {
 
     // Product
     Route::resource('products', ProductController::class);
+
+    //Orders
+    Route::get('/orders', [AdminSalesOrderController::class, 'index'])->name('admin.orders');
+    Route::post('/order-complete/{id}', [AdminSalesOrderController::class, 'store'])->name('admin.orders.complete');
 });

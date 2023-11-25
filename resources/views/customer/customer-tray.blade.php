@@ -13,13 +13,18 @@
           {{ Breadcrumbs::render('customer.tray') }}
         </div>
 
-        <div class="row mb-3 bg-secondary sticky-top" style="top: 3.3em;" data-bs-theme="light">
-          {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
-          <div class="col d-inline-flex justify-content-end align-items-center p-0">
-            <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em; color: black; margin-right: 1em;" name="subtotal" id="subtotal"></strong></h4>
-            <button type="submit" class="btn btn-success">Checkout</button>
+{{-- FORM CHECKOUT --}}
+      <form action="{{ route('tray.checkout') }}" method="post">
+        @csrf
+        
+        @if (count($tray) > 0)
+          <div class="row mb-3 bg-secondary sticky-top" style="top: 3.3em;" data-bs-theme="light">
+            <div class="col d-inline-flex justify-content-end align-items-center p-0">
+              <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em; color: black; margin-right: 1em;" name="subtotal" id="subtotal"></strong></h4>
+              <button type="submit" class="btn btn-success">Checkout</button>
+            </div>
           </div>
-        </div>
+        @endif
         
         
         <div class="row">
@@ -46,7 +51,8 @@
                     <tr>
                       <td>{{ $count++ }}</td>
                       <td>
-                        <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+                        <input type="hidden" name="tray_id[]" value="{{ $item->tray_id }}">
+                        <input type="hidden" name="product_id[]" value="{{ $item->product_id }}">
                         <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="100" height="100">
                         {{ $item->product_name }}
                         @if ($item->variant != null)
@@ -54,17 +60,19 @@
                         @endif
                       </td>
                       <td class="price">
-                        <input type="hidden" name="price" value="{{ $item->unit_price }}">
+                        <input type="hidden" name="price[]" value="{{ $item->unit_price }}">
                         {{ $item->unit_price }}
                       </td>
                       <td>
-                        <input type="number" min="1" name="quantity" class="quantity"  value="1" style="max-width: 6em; min-height: 3em; text-align:center;">
+                        <input type="number" min="1" name="quantity[]" class="quantity"  value="1" style="max-width: 6em; min-height: 3em; text-align:center;">
                       </td>
                       <td class="total" name="total">
                         <input type="hidden" name="total" value="{{ $item->unit_price * 1 }}">
                         {{ $item->unit_price * 1 }}.00
                       </td>
+
                     </form><!-- form checkout -->
+
                       <td>
                         <form action="{{ route('tray.destroy', $item->tray_id) }}" method="POST">
                           @csrf
@@ -82,7 +90,7 @@
               </tbody>
             </table>
             <div class="d-flex justify-content-end px-3">
-              
+              {{ $tray->links() }}
             </div>
           </div>
 

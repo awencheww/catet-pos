@@ -22,7 +22,7 @@
             bottom: 230px;
           }
           #filter {
-            top: 5.5em;
+            top: 4.5em;
           }
           #offcanvasTray {
             width: 650px;
@@ -39,11 +39,11 @@
       <!-- Navigation -->
       @include('storefront.partials.nav')
 
-      <!-- Tray -->
-      @include('storefront.partials.tray')
-
       <div class="container-fluid">
         <div class="row">
+
+          <!-- Header -->
+          @includeWhen(request()->routeIs('home'), 'storefront.partials.header')
 
           <main class="px-md-4 p-3 mb-5">
             @if (request()->routeIs('storefront.index'))
@@ -69,6 +69,10 @@
         </div>
       </div>
       
+
+      <!-- Tray -->
+      @include('storefront.partials.tray')
+
       <!-- Footer -->
       @include('storefront.partials.footer')
 

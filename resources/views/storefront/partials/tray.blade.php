@@ -10,15 +10,17 @@
     @endguest
 
       @auth
-        <a href="{{ route('customer.tray') }}" class="btn btn-primary" id="offcanvasTrayLabel">
-          <i class="bi bi-eye"></i>
-          View Your Tray
-        </a>
+        @if(count($tray) > 0)
+          <a href="{{ route('customer.tray') }}" class="btn btn-primary" id="offcanvasTrayLabel">
+            <i class="bi bi-eye"></i>
+            View Your Tray
+          </a>
 
-        <h4 id="subtotal-header" style="margin-left: 2em;">Subtotal: <strong style="font-size: 1.3em;" name="subtotal" id="subtotal"></strong></h4>
+          <h4 id="subtotal-header" style="margin-left: 2em;">Subtotal: <strong style="font-size: 1.3em;" name="subtotal" id="subtotal"></strong></h4>
 
-        {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
-        <button type="submit" class="btn btn-success" style="margin-left: 2em;">Checkout</button>
+          {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
+          <button type="submit" class="btn btn-success" style="margin-left: 2em;">Checkout</button>
+        @endif
       @endauth
 
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -43,6 +45,7 @@
               @forelse ($tray as $item)
                   <tr>
                     <td>
+                      <input type="hidden" name="tray_id[]" value="{{ $item->tray_id }}">
                       <input type="hidden" name="product_id[]" value="{{ $item->product_id }}">
                       <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="100" height="100">
                       {{ $item->product_name }}
@@ -78,9 +81,6 @@
               @endforelse
             </tbody>
           </table>
-          <div class="d-flex justify-content-end px-3">
-            
-          </div>
         </div>
 
       @endisset
@@ -89,6 +89,7 @@
   </div>
 
 @push('home-scripts')
+  @isset($tray)
   <script>
     function currencyFormat(amount) {
       // Parse the text content as a float
@@ -137,4 +138,5 @@
     // @endisset
 
   </script>
+  @endisset
 @endpush
