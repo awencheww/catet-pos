@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('sales_invoice_number')->nullable();
-            $table->foreignId('purchase_order_id')->nullable()->constrained('purchase_oder')->nullOnDelete()->cascadeOnUpdate();
+            // $table->foreignId('purchase_order_id')->nullable()->constrained('purchase_oder')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('sales_order_id')->nullable()->constrained('sales_order')->nullOnDelete()->cascadeOnUpdate();
             $table->decimal('sales_total_amount')->default('0.00');
             $table->decimal('paid_amount')->default('0.00');
