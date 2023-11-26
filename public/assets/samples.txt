@@ -21,3 +21,34 @@ Lomi - 150
 Chocomoist Cake - 120
 Clubhouse w Fries - 130
 Baked Spag - 110
+
+--
+-- Dumping data for table `suppliers`
+--
+INSERT INTO `suppliers` (`id`, `company`, `contact_name`, `email`, `phone_number`, `address`, `created_at`, `updated_at`) VALUES
+(1, 'Catets Sweets And Cakes', 'Catets', 'catets@email.com', '09468465168', 'Sison, Surigao Del Norte', '2023-11-25 08:18:48', '2023-11-25 08:18:48');
+
+--
+-- Dumping data for table `categories`
+--
+INSERT INTO `categories` (`id`, `category_name`, `created_at`, `updated_at`) VALUES
+(1, 'Cakes', '2023-11-25 08:18:56', '2023-11-25 08:18:56'),
+(2, 'Desert', '2023-11-25 08:18:58', '2023-11-25 08:18:58'),
+(3, 'Drinks', '2023-11-25 08:19:00', '2023-11-25 08:19:00'),
+(4, 'Snacks', '2023-11-25 08:19:02', '2023-11-25 08:19:02'),
+(5, 'Cupcakes', '2023-11-25 08:19:04', '2023-11-25 08:19:04');
+--
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `product_name`, `description`, `code`, `category_id`, `supplier_id`, `variant`, `image`, `quantity`, `unit_cost`, `total_cost`, `unit_price`, `expiry`, `created_at`, `updated_at`) VALUES
+(1, 'Avocado Shake', 'Avocado Shake Description', 'AVS', 3, 1, '', '379987355_276518158661371_513677278217453323_n.webp', 5, '70.00', '350.00', '100.00', '2023-11-30', '2023-11-25 08:19:45', '2023-11-25 08:19:45'),
+(2, 'Ice Cream Cake', 'Ice Cream Cake With Mango Float Toppings', '', 1, 1, 'Mango Float Flavor', '356401218_222132110766643_7853165359745477123_n.webp', 10, '85.00', '850.00', '100.00', '2023-11-30', '2023-11-25 08:20:46', '2023-11-25 08:20:46'),
+(3, 'Ice Cream Cake', 'Ice Cream Cake With Strawberry Toppings', '', 2, 1, 'Strawberry Flavor', '379184614_276514208661766_985837246025451387_n.webp', 10, '80.00', '800.00', '100.00', '2023-12-04', '2023-11-25 08:21:31', '2023-11-25 08:21:31'),
+(4, 'Halo-halo', 'Special Halo-halo With More Ice Cream On Top', '', 4, 1, '', '361874748_238068812506306_8973538967145468294_n.webp', 25, '70.00', '1750.00', '100.00', '2023-12-01', '2023-11-25 08:22:02', '2023-11-25 08:22:02'),
+(5, 'Lumi', 'Lumi Description', '', 4, 1, '', '362293469_238701962442991_2164731039847118644_n.webp', 10, '100.00', '1000.00', '150.00', '2023-12-29', '2023-11-25 08:22:36', '2023-11-25 08:22:36'),
+(6, 'Tiktok Cake', 'Tiktok Cake Description', '', 1, 1, 'Yema Cake', '357774742_230903956556125_6973217456007276341_n.webp', 15, '350.00', '5250.00', '500.00', '2023-11-30', '2023-11-25 08:23:14', '2023-11-25 08:23:14'),
+(7, 'Spaghetti', 'Spaghetti Description', '', 4, 1, '', '356652749_222132280766626_4278268766840273971_n.webp', 5, '85.00', '425.00', '120.00', '2023-11-30', '2023-11-25 08:24:32', '2023-11-25 08:24:32'),
+(8, 'Cupcake', 'Customize Cupcake 30pcs Per Order', '', 5, 1, '', '357791821_230903986556122_8828751398100724393_n.webp', 10, '300.00', '3000.00', '400.00', '2023-11-30', '2023-11-25 08:25:08', '2023-11-25 08:25:08'),
+(9, 'Choco Moist', 'Catet\'s Special Special Choco Moist', '', 2, 1, '', '360118655_234147689565085_4369473405992901901_n.webp', 15, '100.00', '1500.00', '150.00', '2023-11-30', '2023-11-25 08:26:25', '2023-11-25 08:26:25');
