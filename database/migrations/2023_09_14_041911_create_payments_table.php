@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->foreignId('sales_order_id')->nullable()->constrained('sales_order')->nullOnDelete()->cascadeOnUpdate();
             $table->decimal('sales_total_amount')->default('0.00');
             $table->decimal('paid_amount')->default('0.00');
-            $table->enum('method', ['cash', 'e-wallet', 'cod'])->default('cash');
+            $table->enum('payment_method', ['cash', 'e-wallet', 'cod'])->default('cash');
             $table->enum('status', ['preparing', 'paid', 'unpaid', 'partially paid', 'fully paid'])->default('preparing');
             $table->string('note')->nullable();
             $table->timestamps();

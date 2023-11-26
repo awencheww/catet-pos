@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Closure;
 use App\Models\User;
 use App\Models\Customer;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
-use Closure;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class CustomerController extends Controller
 {
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -31,7 +33,7 @@ class CustomerController extends Controller
                             ->latest('users.created_at')
                             ->fastPaginate($perPage);
         }
-        return view('customer.index', compact('customers'));
+        return view('customer.index', compact('customers', 'orders_count'));
     }
 
     public function updateCustomer(Request $request)

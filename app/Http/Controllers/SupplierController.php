@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -28,7 +30,7 @@ class SupplierController extends Controller
             $suppliers = Supplier::query()->latest('created_at')
                             ->fastPaginate($perPage);
         }
-        return view('dashboard.suppliers.index', compact('suppliers'));
+        return view('dashboard.suppliers.index', compact('suppliers', 'orders_count'));
     }
 
     /**

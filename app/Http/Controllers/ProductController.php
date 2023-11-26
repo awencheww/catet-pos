@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Buglinjo\LaravelWebp\Webp;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -72,7 +74,7 @@ class ProductController extends Controller
                             ->latest('products.created_at')
                             ->fastPaginate($perPage);
         }
-        return view('dashboard.products.index', compact('products'));
+        return view('dashboard.products.index', compact('products', 'orders_count'));
     }
 
     /**

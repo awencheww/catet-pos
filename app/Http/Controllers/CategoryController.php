@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -23,7 +25,7 @@ class CategoryController extends Controller
             $categories = Category::query()->latest('created_at')
                             ->fastPaginate($perPage);
         }
-        return view('dashboard.categories.index', compact('categories'));
+        return view('dashboard.categories.index', compact('categories', 'orders_count'));
     }
 
     /**

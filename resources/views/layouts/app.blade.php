@@ -38,25 +38,23 @@
 @stack('app-scripts')
 
 {{-- sweetalert toast --}}
-@if ($message = Session::get('success'))
 <script type="text/javascript">
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 2000,
+    timer: 2500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
-
-  Toast.fire({
-    icon: 'success',
-    title: '{{ $message }}'
-  })
-  
+  @if ($message = Session::get('success'))
+    Toast.fire({
+      icon: 'success',
+      title: '{{ $message }}'
+    })
+  @endif
 </script>
-@endif
 </html>

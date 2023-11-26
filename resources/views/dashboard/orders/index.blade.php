@@ -32,29 +32,17 @@
         $count = 1;
       @endphp
       <div class="table-responsive small">
-        <table class="table table-hover table-borderless align-middle table-sm">
+        <table class="table table-hover table-borderless table-striped align-middle table-sm">
           <thead class="border-black border-bottom">
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Transaction No.</th>
-              <th scope="col">Invoice #</th>
-              <th scope="col">Product</th>
+              <th scope="col">Customer Name</th>
               <th scope="col">Price</th>
               <th scope="col">Quantity</th>
               <th scope="col">Total</th>
               <th scope="col">Date Ordered</th>
               <th scope="col">Status</th>
-
-              <th scope="col">Sugar Content (Less 10 to 50%)</th>
-              <th scope="col">Writing</th>
-
-              {{-- @foreach ($orders as $item)
-                @if ($item->category_name === 'Cakes')
-                  <th scope="col">Sugar Content (Less 10 to 50%)</th>
-                  <th scope="col">Writing</th>
-                @endif
-              @endforeach --}}
-              
               <th scope="col">Payment</th>
               <th></th>
             </tr>
@@ -64,77 +52,25 @@
             @forelse ($orders as $item)  
               <tr>
                 <td>{{ $count++ }}</td>
+
                 <td>{{ $item->transaction_number }}</td>
-                <td>
-                  <input type="hidden" name="sales_invoice" value="{{ $item->sales_invoice_number }}">
-                  {{ $item->sales_invoice_number }}
-                </td>
-                <td>
-                  <input type="hidden" name="order_id" value="{{ $item->order_id }}">
-                  <input type="hidden" name="product_id" value="{{ $item->product_id }}">
-                  <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="100" height="100">
-                  {{ $item->product_name }}
-                  @if ($item->variant != null)
-                    <span class="badge bg-info">{{ $item->variant }}</span>
-                  @endif
-                </td>
-                <td class="price">
-                  <input type="hidden" name="price" value="{{ $item->unit_price }}">
-                  {{ $item->unit_price }}
-                </td>
-                <td>
-                  <input type="number" min="1" name="quantity" class="quantity" disabled  value="{{ $item->oder_quantity }}" style="max-width: 6em; min-height: 3em; text-align:center;">
-                </td>
-                <td class="total" name="total">
-                  <input type="hidden" name="total" value="{{ $item->unit_price * 1 }}">
-                  {{ $item->unit_price * 1 }}.00
-                </td>
-                <td>
-                  {{ $item->sales_date }}
-                </td>
-                <td>
-                  {{ $item->so_status }}
-                </td>
-
-                @if ($item->category_name === 'Cakes')
-                <form action="{{route('admin.orders.complete',  $item->order_id)}}" method="POST" class="complete">
-                  @csrf
-                  
-                  <td>
-                    <input type="hidden" name="transaction_number" value="{{ $item->transaction_number }}">
-                    <input type="number" min="10" max="50" name="sugar_content" class="sugar_content" onchange="isMax(event)"  value="{{ $item->sugar_content }}" style="max-width: 6em; min-height: 3em; text-align:center;">
-                  </td>
-                  <td>
-                    <textarea name="writing" class="writing" cols="30" rows="3" maxlength="100" wrap="hard"> {{ $item->sugar_content }} </textarea>
-                  </td>
-                @else
-                  <td></td>
-                  <td></td>
-                @endif
-
-                <td>
-                  <div class="form-floating">
-                    <select name="payment_method_tobeupdate" class="form-select border border-success" id="selectMethod">
-                      <option value="cash">Cash</option>
-                      <option value="e-wallet" >E-wallet (Gcash)</option>
-                      <option value="cod" selected>COD (Cash on Delivery)</option>
-                    </select>
-                    <label for="floatingSelectGrid">Select Payment Method</label>
-                  </div>  
-                </td>
+                <td>{{ $item->name }}</td>
+                {{-- <td>
+                  <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="50" height="50" class="img-thumbnail">
+                </td> --}}
+                {{-- <td>{{ $item->product_name }}</td> --}}
+                <td>@money($item->unit_price)</td>
+                <td>{{ $item->order_quantity }}</td>
+                <td>@money($item->order_quantity * $item->unit_price)</td>
+                <td>{{ $item->sales_date }}</td>
+                <td><span class='badge {{ $item->status == 'paid' ? 'bg-success' : ($item->status == 'partially paid' ? 'bg-warning' : 'bg-danger') }}'>{{ ucwords($item->status) }}</span></td>
+                <td>{{ $item->payment_method }}</td>
                 
                 <td class="d-flex justify-content-center align-items-center p-sm-1">
-                  {{-- <a href="{{route('orders.edit', $product->product_id)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
-                      <i class="bi bi-pencil-square"></i> 
-                  </a> --}}
-                  
-                    <input type="hidden" name="payment_method" value="{{ $item->payment_method }}">
-                    <input type="hidden" name="unit_price" value="{{ $item->unit_price }}">
-                    <input type="hidden" name="order_quantity" value="{{ $item->order_quantity }}">
-                    <button type="submit" class="btnComplete btn btn-success btn-sm">
-                      Complete
-                    </button>
-                  </form>
+                  <a href="{{ route('admin.orders.show', $item->user_id) }}" class="btn btn-primary btn-sm" style="margin-right: 2px">
+                      <i class="bi bi-eye"></i>
+                      View 
+                  </a>
                 </td>
 
               </tr>

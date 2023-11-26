@@ -13,25 +13,25 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.index')">
+          <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.index') || request()->is('suppliers/*')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Suppliers
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
+          <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index') || request()->is('categories/*')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Categories
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+          <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index') || request()->is('products/*')">
             <svg class="bi"><use xlink:href="#cart"/></svg>
             Products
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('/customers')" :active="request()->routeIs('/customers')">
+          <x-nav-link :href="route('/customers')" :active="request()->is('customers') || request()->is('customer/*')">
             <svg class="bi"><use xlink:href="#people"/></svg>
             Customers
           </x-nav-link>
@@ -43,9 +43,14 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
-          <x-nav-link :href="route('admin.orders')" :active="request()->routeIs('admin.orders')">
+          <x-nav-link :href="route('admin.orders')" :active="request()->routeIs('admin.orders') || request()->is('orders/*')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Orders
+            @isset($orders_count)
+              <span class="badge bg-danger">
+                {{ $orders_count }}
+              </span>
+            @endisset
           </x-nav-link>
         </li>
         {{-- <li class="nav-item">
@@ -99,7 +104,7 @@
 
       <ul class="nav flex-column mb-auto">
         <li class="nav-item">
-          <x-nav-link :href="route('/users')" :active="request()->routeIs('/users')">
+          <x-nav-link :href="route('/users')" :active="request()->routeIs('/users') || request()->is('user/*')">
             <i class="bi bi-person-plus"></i>
             User
           </x-nav-link>

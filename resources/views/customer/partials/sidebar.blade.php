@@ -25,6 +25,12 @@
           </x-nav-link>
         </li>
         <li class="nav-item">
+          <x-nav-link :href="route('order.sent')" :active="request()->routeIs('order.sent')">
+            <svg class="bi"><use xlink:href="#file-earmark"/></svg>
+            Sent Orders
+          </x-nav-link>
+        </li>
+        <li class="nav-item">
           <x-nav-link :href="route('order.history')" :active="request()->routeIs('order.history')">
             <svg class="bi"><use xlink:href="#file-earmark"/></svg>
             Order History

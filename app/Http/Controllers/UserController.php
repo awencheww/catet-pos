@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Cashier;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -28,7 +30,7 @@ class UserController extends Controller
                             ->latest('users.created_at')
                             ->fastPaginate($perPage);
         }
-        return view('user.index', compact('users'));
+        return view('user.index', compact('users', 'orders_count'));
     }
 
     public function deleteUser($id)
@@ -75,7 +77,8 @@ class UserController extends Controller
 
     public function adminSettings()
     {
-        return view('dashboard.admin.settings');
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
+        return view('dashboard.admin.settings', compact('orders_count'));
     }
 
     public function updateSettings(Request $request)

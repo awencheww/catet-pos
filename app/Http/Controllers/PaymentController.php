@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,14 +14,15 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
+        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
             $payments = Payment::query()
                             ->where('id', 'LIKE', "%$keyword%")
-                            ->orWhere('purchase_order_id', 'LIKE', "%$keyword%")
-                            ->orWhere('sales_order_id', 'LIKE', "%$keyword%")
-                            ->orWhere('method', 'LIKE', "%$keyword%")
+                            // ->orWhere('purchase_order_id', 'LIKE', "%$keyword%")
+                            ->orWhere('sales_invoice_number', 'LIKE', "%$keyword%")
+                            ->orWhere('payment_method', 'LIKE', "%$keyword%")
                             ->orWhere('status', 'LIKE', "%$keyword%")
                             ->orWhere('note', 'LIKE', "%$keyword%")
                             ->orWhere('created_at', 'LIKE', "%$keyword%")
@@ -29,7 +31,7 @@ class PaymentController extends Controller
             $payments = Payment::query()->latest('created_at')
                             ->fastPaginate($perPage);
         }
-        return view('dashboard.payments.index', compact('payments'));
+        return view('dashboard.payments.index', compact('payments', 'orders_count'));
     }
 
     /**

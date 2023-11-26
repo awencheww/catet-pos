@@ -71,8 +71,13 @@ Route::middleware('auth')->group(function () {
 
     // Customer Orders
     Route::get('/customer/order', [SalesOrderController::class, 'index'])->name('customer.order');
+    Route::get('/customer/order-sent', [SalesOrderController::class, 'orderSent'])->name('order.sent');
     Route::get('/customer/order-history', [SalesOrderController::class, 'orderHistory'])->name('order.history');
     Route::post('/customer/order-checkout', [SalesOrderController::class, 'store'])->name('order.checkout');
+
+    // Customer Orders Update sugar content, writing
+    Route::post('/customer/order-update-sugar-content/{id}', [SalesOrderController::class, 'updateSugarContent'])->name('order.updateSugarContent');
+    Route::post('/customer/order-update-writing/{id}', [SalesOrderController::class, 'updateWriting'])->name('order.updateWriting');
 
     //Delete order
     Route::post('/customer/delete/{id}', [SalesOrderController::class, 'destroy'])->name('order.destroy');
@@ -122,5 +127,16 @@ Route::middleware('admin')->group(function () {
 
     //Orders
     Route::get('/orders', [AdminSalesOrderController::class, 'index'])->name('admin.orders');
-    Route::post('/order-complete/{id}', [AdminSalesOrderController::class, 'store'])->name('admin.orders.complete');
+    Route::get('/show-order/{id}', [AdminSalesOrderController::class, 'create'])->name('admin.orders.show');
+    Route::post('/order-complete', [AdminSalesOrderController::class, 'store'])->name('admin.orders.complete');
+    Route::post('/order-destroy/{id}', [AdminSalesOrderController::class, 'destroy'])->name('admin.orders.destroy');
+
+    //Update Orders Status, Note, Payment method, sugar content, writing
+    Route::post('/order-update/{id}', [AdminSalesOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    Route::post('/order-update-paid-amount/{id}', [AdminSalesOrderController::class, 'updatePaidAmount'])->name('admin.orders.updatePaidAmount');
+    Route::post('/order-update-qty/{id}', [AdminSalesOrderController::class, 'updateQuantity'])->name('admin.orders.updateQuantity');
+    Route::post('/order-update-payment-method/{id}', [AdminSalesOrderController::class, 'updatePaymentMethod'])->name('admin.orders.updatePaymentMethod');
+    Route::post('/order-update-payment-note/{id}', [AdminSalesOrderController::class, 'updatePaymentNote'])->name('admin.orders.updateNote');
+    Route::post('/order-update-sugar-content/{id}', [AdminSalesOrderController::class, 'updateSugarContent'])->name('admin.orders.updateSugarContent');
+    Route::post('/order-update-writing/{id}', [AdminSalesOrderController::class, 'updateWriting'])->name('admin.orders.updateWriting');
 });

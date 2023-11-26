@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\User;
 use App\Models\Payment;
+use App\Models\Product;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
-use App\Models\AdminSalesOrder;
+use Illuminate\Support\Facades\DB;
 
 class AdminSalesOrderController extends Controller
 {
@@ -19,114 +22,108 @@ class AdminSalesOrderController extends Controller
         if(auth()->user()) {
             $id = auth()->user()->id;
             //add tray
-            $order_count = SalesOrder::query()->get('quantity')->count();
+            //TODO: DISPLAY ONY THE USER AND TRANSACTION NUMBER FOR ORDER THEN ADD VIEW ORDER DETAILS BUTTON OR COLLAPSE EXPAND BOOTSTRAP THE DETAILS
+            //       AND TRY TO CREATE THIS MYSQL QUERY INTO LARAVEL EQUIVALENT
+            // SELECT * FROM users RIGHT JOIN sales_order ON sales_order.user_id = users.id WHERE EXISTS ( SELECT * FROM customers WHERE customers.user_id=users.id );
             $query = SalesOrder::query()
-                    ->rightJoin('products', 'products.id', '=', 'sales_order.product_id')
-                    ->rightJoin('categories', 'categories.id', '=', 'products.category_id')
-                    ->rightJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
-                    ->select(
-                        'transaction_number',
-                        'sales_order.id as order_id',
-                        'products.id as product_id',
-                        'categories.id as categories_id',
-                        'category_name',
-                        'product_name',
-                        'description',
-                        'code',
-                        'variant',
-                        'image',
-                        'sales_order.quantity as oder_quantity',
-                        'unit_cost',
-                        'total_cost',
-                        'unit_price',
-                        'expiry',
-                        'so_status',
-                        'sales_date',
-                        'sales_invoice_number',
-                        'payment_method',
-                    )
-                    ->where('so_status', '=', 'preparing')
-                    ->latest('sales_order.sales_date');
+                        ->rightJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
+                        ->rightJoin('products', 'products.id', '=', 'sales_order.product_id')
+                        ->rightJoin('categories', 'categories.id', '=', 'products.category_id')
+                        ->rightJoin('users', 'users.id', '=', 'sales_order.user_id')
+                        ->rightJoin('customers', 'customers.user_id', '=', 'users.id')
+                        ->select(
+                            'sales_order.id AS order_id',
+                            'customers.user_id AS customers_user_id',
+                            'categories.id AS categories_id',
+                            'sales_order.user_id AS sales_order_user_id',
+                            'sales_order.quantity AS order_quantity',
+                            'customers.name',
+                            'payments.*',
+                            'sales_order.*',
+                            'products.*',
+                            'categories.*',
+                        )
+                        ->where('so_status', '=', 'preparing')
+                        ->orderBy('sales_order.sales_date')
+                        ->orderBy('sales_order.user_id');
             if(!empty($keyword)) {
-                $query->orWhere('transaction_number', 'LIKE', "%$keyword%")
-                    ->orWhere('product_name', 'LIKE', "%$keyword%")
-                    ->orWhere('sales_invoice_number', 'LIKE', "%$keyword%")
-                    ->orWhere('code', 'LIKE', "%$keyword%")
-                    ->orWhere('products.id', 'LIKE', "%$keyword%")
-                    ->orWhere('category_name', 'LIKE', "%$keyword%")
-                    ->orWhere('company', 'LIKE', "%$keyword%")
-                    ->orWhere('unit_cost', 'LIKE', "%$keyword%")
-                    ->orWhere('order_quantity', 'LIKE', "%$keyword%")
-                    ->orWhere('total_cost', 'LIKE', "%$keyword%")
-                    ->orWhere('unit_price', 'LIKE', "%$keyword%")
-                    ->orWhere('so_status', 'LIKE', "%$keyword%");
+                $query->where(function ($query) use ($keyword) {
+                    $query->orWhere('transaction_number', 'LIKE', "%$keyword%")
+                            ->orWhere('sales_order.quantity', 'LIKE', "%$keyword%")
+                            ->orWhere('sales_order.sales_date', 'LIKE', "%$keyword%")
+                            ->orWhere('total_amount', 'LIKE', "%$keyword%")
+                            ->orWhere('price', 'LIKE', "%$keyword%")
+                            ->orWhere('payments.status', 'LIKE', "%$keyword%");
+                });
             }
             $orders = $query->fastPaginate($perPage);
+            $orders_count = $query->count();
         }
-        return view('dashboard.orders.index', compact('order_count', 'orders'));
+        return view('dashboard.orders.index', compact('orders_count', 'orders'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show Orders for each User
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $orders = SalesOrder::query()
+                    ->leftJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
+                    ->leftJoin('products', 'products.id', '=', 'sales_order.product_id')
+                    ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+                    ->leftJoin('users', 'users.id', '=', 'sales_order.user_id')
+                    ->leftJoin('customers', 'customers.user_id', '=', 'users.id')
+                    ->select(
+                        'sales_order.id AS order_id',
+                        'customers.user_id AS customers_user_id',
+                        'categories.id AS categories_id',
+                        'sales_order.user_id AS sales_order_user_id',
+                        'sales_order.quantity AS order_quantity',
+                        'customers.*',
+                        'payments.*',
+                        'sales_order.*',
+                        'products.*',
+                        'categories.*',
+                    )
+                    ->where('sales_order.user_id', '=', $id)
+                    ->where('sales_order.so_status', '=', 'preparing')
+                    ->orderBy('sales_order.sales_date')
+                    ->orderBy('sales_order.user_id')
+                    ->latest('sales_order.sales_date')->get();
+        return view('dashboard.orders.show', compact('orders'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Complete all orders
      */
-    public function store(Request $request, $order_id)
+    public function store(Request $request)
     {
         // Assuming $request is the request object containing your data
         $data = $request->all();
-        // $prefix = auth()->user()->id;
-        // $invoice_number = $prefix . substr(md5(uniqid()), 0, 8);
-        // Loop through the arrays to save each sales order
-        $existingOrder = SalesOrder::where('user_id', auth()->user()->id)
-            ->where('sales_order.product_id', $request->product_id)
-            ->where('so_status', 'preparing')
-            ->first();
-
-        if ($existingOrder) {
-            // Update existing order with additional quantity, price, and change status
-            $existingOrder->quantity = $request->quantity;
-            $existingOrder->total_amount = $request->unit_price * $request->order_quantity;
-            $existingOrder->net_total = $request->unit_price * $request->order_quantity;
-            $existingOrder->sugar_content = $request->sugar_content ?? null;
-            $existingOrder->writing = $request->writing ?? null;
-            //     $existingOrder->writing = $data['writing'][$i] ?? null;
-            //TODO: form sugar_content and writings if order is cake
-            // if (isset($data['transaction_number'][$i]) && ($data['transaction_number'][$i] == $existingOrder->transaction_number)) {
-            //     $existingOrder->sugar_content = $data['sugar_content'][$i] ?? null;
-            //     $existingOrder->writing = $data['writing'][$i] ?? null;
-            //     // Add any other fields you want to update here
-            // }
-            $existingOrder->so_status = 'complete';
-            $existingOrder->save();
-        }
-
-        //update payments
-        $payment = Payment::where('sales_order_id', $order_id)
-            ->first();
-        if($payment) {
-            $payment->sales_order_id = $order_id;
-            $payment->payment_method = $request->payment_method;
-            $payment->sales_total_amount = $request->unit_price * $request->order_quantity;
-            $payment->paid_amount = $request->unit_price * $request->order_quantity;
+        $prefix = auth()->user()->id;
+        $invoice_number = $prefix . substr(md5(uniqid()), 0, 8);
+        // dd($data);
+        $orderIds = $data['order_id'];
+        foreach ($orderIds as $index => $orderId) {
+            $order = SalesOrder::findOrFail($orderId);
+            $payment = Payment::query()->where('sales_order_id', '=', $orderId)->first();
+            
+            // Update Sales
+            $order->so_status = 'complete';
+            $order->save();
+            
+            // Update Payments
+            $payment->sales_invoice_number = $invoice_number;
+            $payment->paid_amount = $payment->sales_total_amount;
             $payment->status = 'paid';
             $payment->save();
+
+            // Update Inventory
+            $product = Product::query()->where('products.id', '=', $order->product_id)->first();
+            $product->quantity -= $order->quantity;
+            $product->save();
         }
-        // Payment::create([
-        //     'sales_invoice_number' => $data['sales_invoice'][$i],
-        //     'sales_order_id' => $data['order_id'][$i],
-        //     'payment_method' => $data['payment_method'],
-        //     'sales_total_amount' => $data['price'][$i] * $data['quantity'][$i],
-        //     'paid_amount' => $data['price'][$i] * $data['quantity'][$i],
-        //     'status' => 'paid',
-        // ]);
-        return redirect()->back()->with(['success' => 'Preparing your order.']);
+        return redirect()->route('admin.orders')->with(['success' => 'Orders Successfully Completed.']);
     }
 
     /**
@@ -134,7 +131,7 @@ class AdminSalesOrderController extends Controller
      */
     public function show(SalesOrder $salesOrder)
     {
-        //
+
     }
 
     /**
@@ -142,22 +139,112 @@ class AdminSalesOrderController extends Controller
      */
     public function edit(SalesOrder $salesOrder)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SalesOrder $salesOrder)
+    public function update($id)
     {
         //
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $status = $request->input('status');
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+        $payment->status = $status;
+        $payment->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Status updated successfully ']);
+    }
+
+    public function updatePaymentMethod(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('paymentMethod');
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+        $payment->payment_method = $input;
+        $payment->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Status updated successfully ']);
+    }
+
+    public function updatePaymentNote(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('paymentNote');
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+        $payment->note = $input;
+        $payment->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Payment Note updated successfully ']);
+    }
+
+    public function updatePaidAmount(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('paidAmount');
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+        $payment->paid_amount = $input;
+        $payment->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Payment Note updated successfully ']);
+    }
+
+    public function updateQuantity(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('qty');
+        $order = SalesOrder::findOrFail($id);
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+
+        $order->quantity = intval($input);
+        $order->total_amount = $order->quantity * $order->price;
+        $order->net_total = $order->quantity * $order->price;
+        $order->save();
+
+        $payment->sales_total_amount = $order->total_amount;
+        $payment->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Quantity updated successfully ']);
+    }
+
+    public function updateSugarContent(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('sugarContent');
+        $order = SalesOrder::findOrFail($id);
+        $order->sugar_content = intval($input);
+        $order->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Sugar Content updated successfully ']);
+    }
+
+    public function updateWriting(Request $request, $id)
+    {
+        // Retrieve the status from the request
+        $input = $request->input('writing');
+        $order = SalesOrder::findOrFail($id);
+        $order->writing = $input;
+        $order->save();
+        // Return a response if necessary
+        return response()->json(['success' => 'Writing updated successfully ']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SalesOrder $salesOrder)
+    public function destroy($id)
     {
-        //
+        $order = SalesOrder::findOrFail($id);
+        $order->so_status = 'cancel';
+        $order->save();
+        $payment = Payment::query()->where('sales_order_id', '=', $id)->first();
+        $payment_id = $payment->id;
+        $payment->destroy($payment_id);
+        return redirect()->back()->with('success', "Order Transaction successfully Cancelled! ");
     }
 }

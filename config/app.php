@@ -1,5 +1,6 @@
 <?php
 
+use Cknow\Money\Money;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -170,6 +171,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         \Hammerstone\FastPaginate\FastPaginateProvider::class,
         Buglinjo\LaravelWebp\WebpServiceProvider::class,
+        \Cknow\Money\MoneyServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -187,6 +189,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'FastPaginate' => \Hammerstone\FastPaginate::class,
         'Webp' => Buglinjo\LaravelWebp\Facades\Webp::class,
+        'Money' => \Cknow\Money\Facade\Money::class,
     ])->toArray(),
 
 ];

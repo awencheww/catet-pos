@@ -31,12 +31,7 @@
                           <!-- Product price-->
                           {{-- <span class="text-muted text-decoration-line-through">$20.00</span> --}}
                           <h5 class="card-text">
-                            @php
-                              $fmt = new NumberFormatter(app()->getLocale(), NumberFormatter::CURRENCY);
-                              $code = $fmt->getTextAttribute(NumberFormatter::CURRENCY_CODE);
-                              $formattedCurrency = $fmt->formatCurrency($product->unit_price, $code);
-                              echo $formattedCurrency;
-                            @endphp
+                            @money($product->unit_price)
                           </h5>
                       </div>
                   </div>

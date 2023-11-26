@@ -26,8 +26,8 @@
           <div class="table-responsive small caption-top">
             <caption>List of Products</caption>
 
-              <table class="table table-hover table-borderless align-middle table-sm">
-              <thead>
+              <table class="table table-hover table-striped table-borderless align-middle table-sm">
+              <thead class="border-black border-bottom">
                 <tr>
                   <th scope="col">No.</th>
                   <th scope="col">Invoice No. </th>
@@ -51,7 +51,7 @@
                       <td>
                         <input type="hidden" name="order_id[]" value="{{ $item->order_id }}">
                         <input type="hidden" name="product_id[]" value="{{ $item->product_id }}">
-                        <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="100" height="100">
+                        <img class="img-thumbnail" src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="60" height="60">
                         {{ $item->product_name }}
                         @if ($item->variant != null)
                           <span class="badge bg-info">{{ $item->variant }}</span>
@@ -62,7 +62,7 @@
                         {{ $item->unit_price }}
                       </td>
                       <td>
-                        <input type="number" min="1" name="quantity[]" class="quantity" disabled  value="{{ $item->oder_quantity }}" style="max-width: 6em; min-height: 3em; text-align:center;">
+                        <input type="number" min="1" name="quantity[]" class="quantity" disabled  value="{{ $item->order_quantity }}" style="max-width: 6em; min-height: 3em; text-align:center;">
                       </td>
                       <td class="total" name="total">
                         <input type="hidden" name="total" value="{{ $item->unit_price * 1 }}">
@@ -72,7 +72,7 @@
                         {{ $item->sales_date }}
                       </td>
                       <td>
-                        {{ $item->so_status }}
+                        <span class='badge {{ $item->so_status == 'complete' ? 'bg-success' : 'bg-danger' }}'>{{ ucwords($item->so_status) }}</span>
                       </td>
                     </tr>
 

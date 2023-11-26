@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="table-responsive small">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover align-middle">
           <thead class="border-black border-bottom">
             <tr>
               <th scope="col">Image</th>
@@ -42,10 +42,10 @@
               <th scope="col">Category</th>
               <th scope="col">Supplier</th>
               <th scope="col">Variant</th>
+              <th scope="col">Price</th>
               <th scope="col">Qty.</th>
               <th scope="col">Cost</th>
               <th scope="col">Total</th>
-              <th scope="col">Price</th>
               <th scope="col">Expiry</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
@@ -54,17 +54,17 @@
             
             @forelse ($products as $product)  
               <tr>
-                <td scope="row"><img src="{{asset('images/'.$product->image)}}" alt="{{ $product->description }}" srcset="" width="50" height="50"></td>
+                <td scope="row"><img src="{{asset('images/'.$product->image)}}" alt="{{ $product->description }}" width="50" height="50" class="img-thumbnail"></td>
                 <td>{{$product->product_name}}</td>
                 <td>{{$product->description}}</td>
                 <td>{{$product->code}}</td>
                 <td>{{$product->category_name}}</td>
                 <td>{{blank($product->company) ? $product->contact_name : $product->company}}</td>
                 <td>{{$product->variant}}</td>
+                <td>@money($product->unit_price)</td>
                 <td>{{$product->quantity}}</td>
-                <td>{{$product->unit_cost}}</td>
-                <td>{{$product->total_cost}}</td>
-                <td>{{$product->unit_price}}</td>
+                <td>@money($product->unit_cost)</td>
+                <td>@money($product->total_cost)</td>
                 <td>{{$product->expiry}}</td>
 
                 <td class="d-flex justify-content-center align-items-center p-sm-1">

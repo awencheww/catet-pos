@@ -25,24 +25,26 @@
           $so_status = $item->so_status;
         }
       @endphp
-        <div class="row mb-3 sticky-top" style="top: 3.3em;">
-          {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
-          <div class="col d-inline-flex justify-content-end align-items-center p-0">
-            <input type="hidden" name="">
-            <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em; margin-right: 1em;" name="subtotal" id="subtotal"></strong></h4>
+        
+        @if (count($orders) > 0)
+          <div class="row mb-3 sticky-top" style="top: 3.3em;">
+            {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
+            <div class="col d-inline-flex justify-content-end align-items-center p-0">
+              <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em; margin-right: 1em;" name="subtotal" id="subtotal"></strong></h4>
 
-            <div class="form-floating">
-              <select name="payment_method" class="form-select border border-success" id="selectMethod" {{ $so_status === 'preparing' ? 'disabled' : '' }}>
-                <option value="cash">Cash</option>
-                <option value="e-wallet" >E-wallet (Gcash)</option>
-                <option value="cod" selected>COD (Cash on Delivery)</option>
-              </select>
-              <label for="floatingSelectGrid">Select Payment Method</label>
+              <div class="form-floating">
+                <select name="payment_method" class="form-select border border-success" id="selectMethod" {{ $so_status === 'preparing' ? 'disabled' : '' }}>
+                  <option value="cash">Cash</option>
+                  <option value="e-wallet" >E-wallet (Gcash)</option>
+                  <option value="cod" selected>COD (Cash on Delivery)</option>
+                </select>
+                <label for="floatingSelectGrid">Select Payment Method</label>
+              </div>
+
+              <button type="submit" class="btn btn-success btn-lg mx-2" {{ $so_status === 'preparing' ? 'disabled' : '' }}>Complete Order</button>
             </div>
-
-            <button type="submit" class="btn btn-success btn-lg mx-2" {{ $so_status === 'preparing' ? 'disabled' : '' }}>Complete Order</button>
           </div>
-        </div>
+        @endif
         
         
         <div class="row">
@@ -64,12 +66,8 @@
                   <th scope="col">Quantity</th>
                   <th scope="col">Total</th>
                   {{-- //TODO: form sugar_content and writings if order is cake --}}
-                  {{-- @foreach ($orders as $item)
-                    @if ($item->category_name === 'Cakes')
-                      <th scope="col">Sugar Content (Less 10 to 50%)</th>
-                      <th scope="col">Writing</th>
-                    @endif
-                  @endforeach --}}
+                  <th scope="col">Sugar Content (Less 10 to 50%)</th>
+                  <th scope="col">Writing</th>
                   <th scope="col">Status</th>
                   <th></th>
                 </tr>
@@ -102,20 +100,20 @@
                       </td>
 
                       {{-- //TODO: form sugar_content and writings if order is cake --}}
-                      {{-- @if ($item->category_name === 'Cakes')
+                      @if ($item->category_name === 'Cakes')
                         <td>
-                          <input type="hidden" name="transaction_number[]" value="{{ $item->transaction_number }}">
-                          <input type="number" min="10" max="50" name="sugar_content[]" class="sugar_content" onchange="isMax(event)"  value="{{ $item->sugar_content }}" {{ $item->so_status === 'preparing' ? 'disabled' : '' }} style="max-width: 6em; min-height: 3em; text-align:center;">
+                          <input type="number" min="10" max="50" name="sugar_content" onchange="onChangeSugarContent(event, {{$item->order_id}})" class="sugar_content" value="{{ $item->sugar_content }}" {{ $item->so_status === 'preparing' ? 'disabled' : '' }} style="max-width: 6em; min-height: 3em; text-align:center;">
                         </td>
                         <td>
-                          <textarea name="writing[]" class="writing" cols="30" rows="3" maxlength="100" wrap="hard" {{ $item->so_status === 'preparing' ? 'disabled' : '' }}> {{ $item->sugar_content }} </textarea>
+                          <textarea name="writing" class="writing" cols="30" rows="3" onchange="onChangeWriting(event, {{$item->order_id}})" maxlength="100" wrap="hard" {{ $item->so_status === 'preparing' ? 'disabled' : '' }}> {{ $item->writing }} </textarea>
                         </td>
                       @else
                         <td></td>
                         <td></td>
-                      @endif --}}
+                      @endif
                       
                       <td>
+                        <input type="hidden" name="so_status[]" value="{{ $item->so_status }}">
                         {{ $item->so_status }}
                       </td>
 
@@ -153,7 +151,102 @@
 
     @push('app-scripts')
         <script>
+          
+          function onChangeSugarContent(e, id) {
+            e.preventDefault();
+            var value = e.target.value;
+            console.log(value);
+            if(value > 50) {
+              window.alert('Maximum 50% less sugar allowed!');
+              value = 50;
+            }
+            if(value < 10) {
+              window.alert('Minimum 10% less sugar allowed!');
+              value = 10;
+            }
+
+            // Fetch API request to update the status
+            fetch('/customer/order-update-sugar-content/' + id, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+                },
+                body: JSON.stringify({
+                  sugarContent: value
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success response
+                Toast.fire({
+                  icon: "success",
+                  title: data.success,
+                })
+            })
+            .catch(error => {
+                Toast.fire({
+                  icon: "success",
+                  title: error,
+                })
+            });
+          }
+
+          function onChangeWriting(e, id) {
+            e.preventDefault();
+            var value = e.target.value;
+            console.log(value);
+
+            // Fetch API request to update the status
+            fetch('/customer/order-update-writing/' + id, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+                },
+                body: JSON.stringify({
+                  writing: value
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success response
+                Toast.fire({
+                  icon: "success",
+                  title: data.success,
+                })
+            })
+            .catch(error => {
+                Toast.fire({
+                  icon: "success",
+                  title: error,
+                })
+            });
+          }
+
           document.addEventListener('readystatechange', function() {
+
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2500,
+              timerProgressBar: true,
+              didOpen: function (toast) {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              },
+            })
 
             var form = document.querySelectorAll(".deleteTransaction");
             form.forEach(element => {

@@ -18,9 +18,9 @@
         {{-- Search --}}
         <div class="col-lg-6">
           <div class="row g-3">
-            <div class="col-lg-4 mb-1">
+            {{-- <div class="col-lg-4 mb-1">
               <a href="{{route('payments.create')}}" type="button" class="btn btn-primary"><i class="bi bi-file-earmark-plus"></i> Add New</a>
-            </div>
+            </div> --}}
             <div class="col-lg-8">
               <form method="GET" action="{{ route('payments.index') }}" accept-charset="UTF-8" role="search">
                 <div class="input-group mb-3">
@@ -37,10 +37,11 @@
           <thead class="border-black border-bottom">
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">P/O ID</th>
-              <th scope="col">S/O ID</th>
+              {{-- <th scope="col">P/O ID</th> --}}
+              <th scope="col">Invoice #</th>
               <th scope="col">Method</th>
               <th scope="col">Status</th>
+              <th scope="col">Paid Amount</th>
               <th scope="col">Note</th>
               <th scope="col">Payment Date</th>
               <th scope="col" class="text-center">Action</th>
@@ -50,10 +51,11 @@
             @forelse ($payments as $payment)  
               <tr>
                 <th scope="row">{{$payment->id}}</th>
-                <td>{{$payment->purchase_order_id}}</td>
-                <td>{{$payment->sales_order_id}}</td>
-                <td>{{$payment->method}}</td>
-                <td>{{$payment->status}}</td>
+                {{-- <td>{{$payment->purchase_order_id}}</td> --}}
+                <td>{{$payment->sales_invoice_number}}</td>
+                <td>{{$payment->payment_method}}</td>
+                <td><span class='badge {{ $payment->status == 'paid' ? 'bg-success' : ($payment->status == 'partially paid' ? 'bg-warning' : 'bg-danger') }}'>{{ ucwords($payment->status) }}</span></td>
+                <td>{{$payment->paid_amount}}</td>
                 <td>{{$payment->note}}</td>
                 <td>{{$payment->created_at->format('F j, Y')}}</td>
                 <td class="d-flex justify-content-center p-sm-1">

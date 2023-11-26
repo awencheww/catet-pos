@@ -5,6 +5,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\SalesOrder;
 use App\Models\Supplier;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -51,6 +52,11 @@ Breadcrumbs::for('customer.order', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('order.history', function (BreadcrumbTrail $trail) {
     $trail->parent('customer.profile');
     $trail->push('Your Order History', route('order.history'));
+});
+// Customer Order Sent
+Breadcrumbs::for('order.sent', function (BreadcrumbTrail $trail) {
+    $trail->parent('customer.profile');
+    $trail->push('Your Sent Orders', route('order.sent'));
 });
 
 
@@ -114,7 +120,7 @@ Breadcrumbs::for('suppliers.edit', function (BreadcrumbTrail $trail, Supplier $s
 // Dashboard > payments
 Breadcrumbs::for('payments', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('payments', route('payments.index'));
+    $trail->push('Payments', route('payments.index'));
 });
 // Dashboard > payments > add
 Breadcrumbs::for('payments.create', function (BreadcrumbTrail $trail) {
@@ -159,4 +165,11 @@ Breadcrumbs::for('storefront.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('admin.orders', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Customer Orders', route('admin.orders'));
+});
+// Dashboard > Customer Orders > Show Orders //TODO: FOR SHOW ORDER BREADCRUMBS
+Breadcrumbs::for('admin.orders.show', function (BreadcrumbTrail $trail) {
+    // $sales_order = SalesOrder::query()->where('user_id', '=', $user_id);
+    // dd($sales_order);
+    $trail->parent('admin.orders');
+    $trail->push('Show Orders', route('admin.orders.show'));
 });
