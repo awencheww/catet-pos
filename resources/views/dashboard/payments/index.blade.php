@@ -42,8 +42,8 @@
               <th scope="col">Method</th>
               <th scope="col">Status</th>
               <th scope="col">Paid Amount</th>
-              <th scope="col">Note</th>
               <th scope="col">Payment Date</th>
+              <th scope="col">Note</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
           </thead>
@@ -55,9 +55,9 @@
                 <td>{{$payment->sales_invoice_number}}</td>
                 <td>{{$payment->payment_method}}</td>
                 <td><span class='badge {{ $payment->status == 'paid' ? 'bg-success' : ($payment->status == 'partially paid' ? 'bg-warning' : 'bg-danger') }}'>{{ ucwords($payment->status) }}</span></td>
-                <td>{{$payment->paid_amount}}</td>
-                <td>{{$payment->note}}</td>
+                <td>@money($payment->paid_amount)</td>
                 <td>{{$payment->created_at->format('F j, Y')}}</td>
+                <td>{{$payment->note}}</td>
                 <td class="d-flex justify-content-center p-sm-1">
                   <a href="{{route('payments.edit', $payment)}}" class="btn btn-primary btn-sm" style="margin-right: 2px">
                       <i class="bi bi-pencil-square"></i> 
