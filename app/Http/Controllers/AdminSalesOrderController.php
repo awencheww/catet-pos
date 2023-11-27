@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Customer;
+use App\Mail\InvoiceEmail;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class AdminSalesOrderController extends Controller
 {
@@ -102,11 +104,16 @@ class AdminSalesOrderController extends Controller
         $data = $request->all();
         $prefix = auth()->user()->id;
         $invoice_number = $prefix . substr(md5(uniqid()), 0, 8);
+        $user_id = '';
+        $order_id = '';
         // dd($data);
         $orderIds = $data['order_id'];
         foreach ($orderIds as $index => $orderId) {
             $order = SalesOrder::findOrFail($orderId);
             $payment = Payment::query()->where('sales_order_id', '=', $orderId)->first();
+
+            $user_id = $order->user_id;
+            $order_id = $order->id;
             
             // Update Sales
             $order->so_status = 'complete';
@@ -123,6 +130,26 @@ class AdminSalesOrderController extends Controller
             $product->quantity -= $order->quantity;
             $product->save();
         }
+        $user = User::findOrFail($user_id)->leftJoin('customers', 'customers.user_id', '=', 'users.id')->first();
+        $orders = SalesOrder::findOrFail($orderId)
+                    ->leftJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
+                    ->leftJoin('products', 'products.id', '=', 'sales_order.product_id')
+                    ->leftJoin('customers', 'customers.user_id', '=', 'sales_order.user_id')
+                    ->select(
+                        'sales_order.id AS order_id',
+                        'customers.user_id AS customers_user_id',
+                        'sales_order.user_id AS sales_order_user_id',
+                        'sales_order.quantity AS order_quantity',
+                        'customers.*',
+                        'payments.*',
+                        'sales_order.*',
+                        'products.*',
+                    )
+                    ->whereIn('sales_order.id', $orderIds)  // Use whereIn to filter based on order IDs
+                    ->where('sales_order.user_id', '=', $user_id)
+                    ->get();
+        // Send the email
+        Mail::to($user->email, $user->name)->send(new InvoiceEmail($orders));
         return redirect()->route('admin.orders')->with(['success' => 'Orders Successfully Completed.']);
     }
 
