@@ -22,37 +22,39 @@
     @csrf
     @isset($orders[0])
         <h2>Show Orders for  {{ $orders[0]['name'] }}</h2>
-        <div class="row g-3">
-          <div class="row mb-3 sticky-top" style="top: 3.3em;">
-            {{-- //TODO: Checkout function Note: add invoice id for tracking and saving it to sales order --}}
 
-            <div class="col-2">
-              <div class="mt-3">
-                <label for="exampleFormControlInput1" class="form-label">Sales Invoice:</label>
-                <h3>{{ $orders[0]['sales_invoice_number'] }}</h3>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="mt-3">
-                <label for="exampleFormControlInput2" class="form-label">Customer Contact:</label>
-                <h3>{{ $orders[0]['phone_number'] }}</h3>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="mt-3">
-                <label for="exampleFormControlInput3" class="form-label">Address:</label>
-                <h3>{{ $orders[0]['address'] }}</h3>
-              </div>
-            </div>
+        <div class="row mb-3 sticky-top bg-dark-subtle" style="top: 3.3em;">
 
-            <div class="col mt-3 d-inline-flex justify-content-end align-items-center p-0">
-              <input type="hidden" name="subtotal" id="hidden-subtotal">
-              <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em;" name="subtotal" id="subtotal"></strong></h4>
-    
-              <button type="submit" class="btn btn-success btn-lg mx-2">Complete Order</button>
+          <div class="row col-lg-8">
+            <div class="col col-md-3 mt-2">
+              <label for="exampleFormControlInput1" class="form-label">Sales Invoice:</label>
+              <h6>{{ $orders[0]['sales_invoice_number'] }}</h6>
             </div>
-
+            <div class="col col-md-3 mt-2">
+              <label for="exampleFormControlInput2" class="form-label">Contact Email:</label>
+              <h6>{{ $orders[0]['email'] }}</h6>
+            </div>
+            <div class="col col-md-3 mt-2">
+              <label for="exampleFormControlInput2" class="form-label">Contact #:</label>
+              <h6>{{ $orders[0]['phone_number'] }}</h6>
+            </div>
+            <div class="col col-md-3 mt-2">
+              <label for="exampleFormControlInput3" class="form-label">Address:</label>
+              <h6>{{ $orders[0]['address'] }}</h6>
+            </div>
           </div>
+
+          <div class="col mb-2 mt-2 col-lg-4 d-inline-flex justify-content-end align-items-center p-0">
+            <input type="hidden" name="subtotal" id="hidden-subtotal">
+            <h4 id="subtotal-header" class="p-0 m-0">Subtotal: <strong style="font-size: 1.3em;" name="subtotal" id="subtotal"></strong></h4>
+  
+            <button type="submit" class="btn btn-success btn-lg mx-2">Complete Order</button>
+          </div>
+
+        </div>
+
+        <div class="row g-3">
+
       @endisset
 
             @php

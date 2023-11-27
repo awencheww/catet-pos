@@ -86,6 +86,7 @@ class AdminSalesOrderController extends Controller
                         'sales_order.*',
                         'products.*',
                         'categories.*',
+                        'users.email',
                     )
                     ->where('sales_order.user_id', '=', $id)
                     ->where('sales_order.so_status', '=', 'preparing')
@@ -114,23 +115,25 @@ class AdminSalesOrderController extends Controller
 
             $user_id = $order->user_id;
             $order_id = $order->id;
-            
-            // Update Sales
-            $order->so_status = 'complete';
-            $order->save();
-            
-            // Update Payments
-            $payment->sales_invoice_number = $invoice_number;
-            $payment->paid_amount = $payment->sales_total_amount;
-            $payment->status = 'paid';
-            $payment->save();
 
-            // Update Inventory
-            $product = Product::query()->where('products.id', '=', $order->product_id)->first();
-            $product->quantity -= $order->quantity;
-            $product->save();
+            // // Update Sales
+            // $order->so_status = 'complete';
+            // $order->save();
+
+            // // Update Payments
+            // $payment->sales_invoice_number = $invoice_number;
+            // $payment->paid_amount = $payment->sales_total_amount;
+            // $payment->status = 'paid';
+            // $payment->save();
+
+            // // Update Inventory
+            // $product = Product::query()->where('products.id', '=', $order->product_id)->first();
+            // $product->quantity -= $order->quantity;
+            // $product->save();
         }
-        $user = User::findOrFail($user_id)->leftJoin('customers', 'customers.user_id', '=', 'users.id')->first();
+        $user = User::query()
+                    ->leftJoin('customers', 'customers.user_id', '=', 'users.id')
+                    ->where('users.id', '=', $user_id)->first();
         $orders = SalesOrder::findOrFail($orderId)
                     ->leftJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
                     ->leftJoin('products', 'products.id', '=', 'sales_order.product_id')
@@ -148,6 +151,7 @@ class AdminSalesOrderController extends Controller
                     ->whereIn('sales_order.id', $orderIds)  // Use whereIn to filter based on order IDs
                     ->where('sales_order.user_id', '=', $user_id)
                     ->get();
+        // dd($orders);
         // Send the email
         Mail::to($user->email, $user->name)->send(new InvoiceEmail($orders));
         return redirect()->route('admin.orders')->with(['success' => 'Orders Successfully Completed.']);

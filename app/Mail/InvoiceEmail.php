@@ -12,16 +12,17 @@ use Illuminate\Queue\SerializesModels;
 
 class InvoiceEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $invoice;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($salesOrder)
-    {   
-        $this->invoice = $salesOrder;
+    public function __construct($orders)
+    {
+        $this->invoice = $orders;
     }
 
     /**
