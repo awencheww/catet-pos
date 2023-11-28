@@ -38,9 +38,8 @@
               <th scope="col">No.</th>
               <th scope="col">Transaction No.</th>
               <th scope="col">Customer Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
+              <th scope="col">Total Quantity</th>
+              <th scope="col">Total Amount</th>
               <th scope="col">Date Ordered</th>
               <th scope="col">Status</th>
               <th scope="col">Payment</th>
@@ -49,36 +48,38 @@
           </thead>
           <tbody>
             
-            @forelse ($orders as $item)  
-              <tr>
-                <td>{{ $count++ }}</td>
+            @forelse ($orders as $item)
 
-                <td>{{ $item->transaction_number }}</td>
-                <td>{{ $item->name }}</td>
-                {{-- <td>
-                  <img src="{{ asset('images/'. $item->image) }}" alt="{{ $item->description }}" width="50" height="50" class="img-thumbnail">
-                </td> --}}
-                {{-- <td>{{ $item->product_name }}</td> --}}
-                <td>@money($item->unit_price)</td>
-                <td>{{ $item->order_quantity }}</td>
-                <td>@money($item->order_quantity * $item->unit_price)</td>
-                <td>{{ $item->sales_date }}</td>
-                <td><span class='badge {{ $item->status == 'paid' ? 'bg-success' : ($item->status == 'partially paid' ? 'bg-warning' : 'bg-danger') }}'>{{ ucwords($item->status) }}</span></td>
-                <td>{{ $item->payment_method }}</td>
-                
-                <td class="d-flex justify-content-center align-items-center p-sm-1">
-                  <a href="{{ route('admin.orders.show', $item->user_id) }}" class="btn btn-primary btn-sm" style="margin-right: 2px">
-                      <i class="bi bi-eye"></i>
-                      View 
-                  </a>
-                </td>
+                <tr>
+                  <td>{{ $count++ }}</td>
 
-              </tr>
+                  <td>{{ $order_totals[$item->user_id]['transactionNo'] }}</td>
+                  <td>{{ $item->name }}</td>
+                  <td>
+                    {{ $order_totals[$item->user_id]['totalQuantity'] }}
+                  </td>
+                  <td>
+                    @money($order_totals[$item->user_id]['totalAmount'])
+                  </td>
+                  <td>{{ $order_totals[$item->user_id]['orderDate'] }}</td>
+                  <td><span class='badge {{ $order_totals[$item->user_id]['paymentStatus'] == 'paid' ? 'bg-success' : ($order_totals[$item->user_id]['paymentStatus'] == 'partially paid' ? 'bg-warning' : 'bg-danger') }}'>{{ ucwords($order_totals[$item->user_id]['paymentStatus']) }}</span></td>
+                  <td>{{ $order_totals[$item->user_id]['paymentMethod'] }}</td>
+                  
+                  <td class="d-flex justify-content-center align-items-center p-sm-1">
+                    <a href="{{ route('admin.orders.show', $item->user_id) }}" class="btn btn-primary btn-sm" style="margin-right: 2px">
+                        <i class="bi bi-eye"></i>
+                        View Orders
+                    </a>
+                  </td>
+
+                </tr>
+              
             @empty
               <tr>
                 <td colspan="20" class="text-center">No record found</td>
               </tr>
             @endforelse
+
           </tbody>
         </table>
         {{-- PAGINATION --}}

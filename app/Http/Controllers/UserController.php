@@ -13,7 +13,9 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
+        $orders_count = User::whereHas('salesOrders', function ($query) {
+            $query->where('sales_order.so_status', '=', 'preparing');
+        })->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
@@ -77,7 +79,9 @@ class UserController extends Controller
 
     public function adminSettings()
     {
-        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
+        $orders_count = User::whereHas('salesOrders', function ($query) {
+            $query->where('sales_order.so_status', '=', 'preparing');
+        })->count();
         return view('dashboard.admin.settings', compact('orders_count'));
     }
 

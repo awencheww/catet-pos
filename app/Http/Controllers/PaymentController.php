@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Payment;
 use App\Models\SalesOrder;
 use Illuminate\Http\Request;
@@ -14,7 +15,9 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
+        $orders_count = User::whereHas('salesOrders', function ($query) {
+            $query->where('sales_order.so_status', '=', 'preparing');
+        })->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {

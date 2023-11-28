@@ -23,45 +23,60 @@ class AdminSalesOrderController extends Controller
         $keyword = $request->get('search');
         if(auth()->user()) {
             $id = auth()->user()->id;
-            //add tray
-            //TODO: DISPLAY ONY THE USER AND TRANSACTION NUMBER FOR ORDER THEN ADD VIEW ORDER DETAILS BUTTON OR COLLAPSE EXPAND BOOTSTRAP THE DETAILS
-            //       AND TRY TO CREATE THIS MYSQL QUERY INTO LARAVEL EQUIVALENT
-            // SELECT * FROM users RIGHT JOIN sales_order ON sales_order.user_id = users.id WHERE EXISTS ( SELECT * FROM customers WHERE customers.user_id=users.id );
-            $query = SalesOrder::query()
-                        ->rightJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
-                        ->rightJoin('products', 'products.id', '=', 'sales_order.product_id')
-                        ->rightJoin('categories', 'categories.id', '=', 'products.category_id')
-                        ->rightJoin('users', 'users.id', '=', 'sales_order.user_id')
-                        ->rightJoin('customers', 'customers.user_id', '=', 'users.id')
-                        ->select(
-                            'sales_order.id AS order_id',
-                            'customers.user_id AS customers_user_id',
-                            'categories.id AS categories_id',
-                            'sales_order.user_id AS sales_order_user_id',
-                            'sales_order.quantity AS order_quantity',
-                            'customers.name',
-                            'payments.*',
-                            'sales_order.*',
-                            'products.*',
-                            'categories.*',
-                        )
-                        ->where('so_status', '=', 'preparing')
-                        ->orderBy('sales_order.sales_date')
-                        ->orderBy('sales_order.user_id');
+            
+            $query = User::whereHas('salesOrders', function ($query) {
+                $query->where('sales_order.so_status', '=', 'preparing');
+            });
             if(!empty($keyword)) {
                 $query->where(function ($query) use ($keyword) {
                     $query->orWhere('transaction_number', 'LIKE', "%$keyword%")
-                            ->orWhere('sales_order.quantity', 'LIKE', "%$keyword%")
-                            ->orWhere('sales_order.sales_date', 'LIKE', "%$keyword%")
-                            ->orWhere('total_amount', 'LIKE', "%$keyword%")
-                            ->orWhere('price', 'LIKE', "%$keyword%")
-                            ->orWhere('payments.status', 'LIKE', "%$keyword%");
+                    ->orWhere('sales_order.quantity', 'LIKE', "%$keyword%")
+                    ->orWhere('sales_order.sales_date', 'LIKE', "%$keyword%")
+                    ->orWhere('total_amount', 'LIKE', "%$keyword%")
+                    ->orWhere('price', 'LIKE', "%$keyword%")
+                    ->orWhere('payments.status', 'LIKE', "%$keyword%");
                 });
             }
-            $orders = $query->fastPaginate($perPage);
+            $orders = $query->rightJoin('customers', 'customers.user_id', '=', 'users.id')
+                            ->select(
+                                'users.*',
+                                'customers.*',
+                            )->fastPaginate($perPage);
+                            
+            $sales_orders = SalesOrder::query()
+                            ->leftJoin('users', 'users.id', '=', 'sales_order.user_id')
+                            ->leftJoin('payments', 'payments.sales_order_id', '=', 'sales_order.id')
+                            ->where('so_status', '=', 'preparing')->get();
+            
+            // Associative array to store totals per user
+            $order_totals = [];
+
+            foreach ($sales_orders as $item) {
+                // Calculate the total amount for the current sales_order
+                $orderTotalAmount = $item->quantity * $item->price;
+
+                // Accumulate total quantity and amount for each user
+                if (!isset($order_totals[$item->user_id])) {
+                    $order_totals[$item->user_id] = [
+                        'totalQuantity' => 0,
+                        'totalAmount' => 0,
+                        'paymentStatus' => '',
+                        'paymentMethod' => '',
+                        'orderDate' => '',
+                        'transactionNo' => '',
+                    ];
+                }
+
+                $order_totals[$item->user_id]['totalQuantity'] += $item->quantity;
+                $order_totals[$item->user_id]['totalAmount'] += $orderTotalAmount;
+                $order_totals[$item->user_id]['paymentStatus'] = $item->status;
+                $order_totals[$item->user_id]['paymentMethod'] = $item->payment_method;
+                $order_totals[$item->user_id]['orderDate'] = $item->sales_date;
+                $order_totals[$item->user_id]['transactionNo'] = $item->transaction_number;
+            }
             $orders_count = $query->count();
         }
-        return view('dashboard.orders.index', compact('orders_count', 'orders'));
+        return view('dashboard.orders.index', compact('orders_count', 'orders', 'order_totals'));
     }
 
     /**
@@ -116,20 +131,20 @@ class AdminSalesOrderController extends Controller
             $user_id = $order->user_id;
             $order_id = $order->id;
 
-            // // Update Sales
-            // $order->so_status = 'complete';
-            // $order->save();
+            // Update Sales
+            $order->so_status = 'complete';
+            $order->save();
 
-            // // Update Payments
-            // $payment->sales_invoice_number = $invoice_number;
-            // $payment->paid_amount = $payment->sales_total_amount;
-            // $payment->status = 'paid';
-            // $payment->save();
+            // Update Payments
+            $payment->sales_invoice_number = $invoice_number;
+            $payment->paid_amount = $payment->sales_total_amount;
+            $payment->status = 'paid';
+            $payment->save();
 
-            // // Update Inventory
-            // $product = Product::query()->where('products.id', '=', $order->product_id)->first();
-            // $product->quantity -= $order->quantity;
-            // $product->save();
+            // Update Inventory
+            $product = Product::query()->where('products.id', '=', $order->product_id)->first();
+            $product->quantity -= $order->quantity;
+            $product->save();
         }
         $user = User::query()
                     ->leftJoin('customers', 'customers.user_id', '=', 'users.id')

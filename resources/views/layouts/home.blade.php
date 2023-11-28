@@ -17,7 +17,7 @@
             max-height: 40em;
           }
           .carousel-caption {
-            background-image: linear-gradient(60deg, rgba(86, 114, 185, 0.), rgba(232, 50, 131, 0.3)) !important;
+            background-image: linear-gradient(60deg, rgba(86, 114, 185, 0.6), rgba(232, 50, 131, 0.5)) !important;
             left: 0px;
             bottom: 230px;
           }

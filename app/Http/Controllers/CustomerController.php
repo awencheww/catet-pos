@@ -16,7 +16,9 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $orders_count = SalesOrder::all()->where('so_status', '=', 'preparing')->count();
+        $orders_count = User::whereHas('salesOrders', function ($query) {
+            $query->where('sales_order.so_status', '=', 'preparing');
+        })->count();
         $keyword = $request->get('search');
         $perPage = 15;
         if($keyword !== null) {
