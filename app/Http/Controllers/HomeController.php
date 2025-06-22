@@ -15,14 +15,14 @@ class HomeController extends Controller
     //Home page view
     public function index(Request $request)
     {
-        if(auth()->user()) {
+        if (auth()->user()) {
             $id = auth()->user()->id;
             $customer = Customer::where('user_id', $id)->first();
             $cashier = Cashier::where('user_id', $id)->first();
-            if($customer && (blank($customer->name) || blank($customer->address) || blank($customer->phone_number))) {
+            if ($customer && (blank($customer->name) || blank($customer->address) || blank($customer->phone_number))) {
                 return redirect()->route('customer.profile');
             }
-            if($cashier && (blank($cashier->name) || blank($cashier->address) || blank($cashier->phone_number))) {
+            if ($cashier && (blank($cashier->name) || blank($cashier->address) || blank($cashier->phone_number))) {
                 return redirect()->route('cashier.profile');
             }
             //add tray count
@@ -47,7 +47,7 @@ class HomeController extends Controller
         }
         $keyword = $request->get('search');
         $perPage = 15;
-        if($keyword !== null) {
+        if ($keyword !== null) {
             //TODO: TRY https://laravel.com/docs/10.x/collections#method-filter for filtering
             $products = Product::query()
                             ->join('categories', 'categories.id', '=', 'products.category_id')
@@ -103,7 +103,7 @@ class HomeController extends Controller
                             ->latest('products.created_at')
                             ->fastPaginate($perPage);
         }
-        if(auth()->user()) {
+        if (auth()->user()) {
             return view('home', compact('products', 'tray_count', 'tray'));
         }
         return view('home', compact('products'));
@@ -112,14 +112,14 @@ class HomeController extends Controller
     //Storefront view
     public function viewProducts(Request $request)
     {
-        if(auth()->user()) {
+        if (auth()->user()) {
             $id = auth()->user()->id;
             $customer = Customer::where('user_id', $id)->first();
             $cashier = Cashier::where('user_id', $id)->first();
-            if($customer && (blank($customer->name) || blank($customer->address) || blank($customer->phone_number))) {
+            if ($customer && (blank($customer->name) || blank($customer->address) || blank($customer->phone_number))) {
                 return redirect()->route('customer.profile');
             }
-            if($cashier && (blank($cashier->name) || blank($cashier->address) || blank($cashier->phone_number))) {
+            if ($cashier && (blank($cashier->name) || blank($cashier->address) || blank($cashier->phone_number))) {
                 return redirect()->route('cashier.profile');
             }
             //add tray
@@ -210,7 +210,7 @@ class HomeController extends Controller
         }
         $products = $query->fastPaginate($perPage);
 
-        if(auth()->user()) {
+        if (auth()->user()) {
             return view('storefront.index', compact('products', 'categories', 'suppliers', 'tray_count', 'tray'));
         }
         return view('storefront.index', compact('products', 'categories', 'suppliers'));
@@ -218,7 +218,7 @@ class HomeController extends Controller
 
     public function addTray(Request $request)
     {
-        if(!auth()->user()) {
+        if (!auth()->user()) {
             return redirect()->back()->with('info', 'Need to Login your Account to continue Shopping. Login now?');
         } else {
             $user_id = auth()->user()->id;
@@ -227,7 +227,7 @@ class HomeController extends Controller
         $tray = Tray::where('user_id', $user_id)
             ->where('product_id', $product_id)
             ->first();
-        if($tray) {
+        if ($tray) {
             return redirect()->back()->with('success', 'Already exist in your Tray!');
         }
         Tray::create([

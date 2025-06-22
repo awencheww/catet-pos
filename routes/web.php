@@ -27,7 +27,7 @@ use App\Models\SalesOrder;
 |
 */
 // Homepage routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', fn () => redirect('/home'));
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 // Guest add to tray
 Route::post('/addtray', [HomeController::class, 'addTray'])->name('add.tray');
